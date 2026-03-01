@@ -200,7 +200,7 @@ class LibraryApp {
     this.contentContainer = document.getElementById('content-container');
 
     this.contentContainer = document.getElementById('content-container');
-    const API_BASE = 'https://dar-al-kalima-backend-production.up.railway.app/api';
+    const API_BASE = 'https://dar-al-kalima-backend.onrender.com/api';
 
     try {
       console.log(`Attempting to fetch data from ${API_BASE}`);
@@ -613,7 +613,7 @@ class LibraryApp {
              <p class="text-muted mb-6">هذا الكتاب متوفر الآن للتحميل المجاني. نرجو أن يكون سبب بركة ومنفعة لحياتك الروحية. تم فهرسة هذا الكتاب ضمن قسم ${book.category || 'عام'}.</p>
              
              <div class="flex flex-col sm:flex-row gap-4 mt-8">
-               <button class="btn btn-primary" onclick="window.open('https://dar-al-kalima-backend-production.up.railway.app/api/download?url=' + encodeURIComponent('${book.download_url || book.url}'), '_blank')">
+               <button class="btn btn-primary" onclick="window.open('https://dar-al-kalima-backend.onrender.com/api/download?url=' + encodeURIComponent('${book.download_url || book.url}'), '_blank')">
                  <i class="fa-solid fa-download"></i> تحميل الكتاب من المنارة
                </button>
                 <button class="btn glass" style="background: rgba(33, 150, 243, 0.2); color: #2196f3; border-color: #2196f3;" onclick="app.shareBook('${book.title.replace(/'/g, "\\'")}')">
@@ -660,7 +660,7 @@ class LibraryApp {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    const API_BASE = 'https://dar-al-kalima-backend-production.up.railway.app/api';
+    const API_BASE = 'https://dar-al-kalima-backend.onrender.com/api';
 
     // 1. Show Loading State
     this.contentContainer!.innerHTML = `
