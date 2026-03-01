@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة التحكم - دار الكلمة</title>
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0e1a;
+            --card: #111827;
+            --card2: #1a2235;
+            --border: #1e3a5f;
+            --primary: #2563eb;
+            --primary-glow: rgba(37, 99, 235, 0.3);
+            --secondary: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --sidebar-w: 260px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* LOGIN OVERLAY */
+        #login-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 48px;
+            width: 360px;
+            text-align: center;
+            box-shadow: 0 0 60px var(--primary-glow);
+        }
+
+        .login-box i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .login-box h2 {
+            margin-bottom: 8px;
+            font-size: 1.5rem;
+        }
+
+        .login-box p {
+            color: var(--muted);
+            margin-bottom: 28px;
+            font-size: 0.9rem;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card2);
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 16px;
+            text-align: center;
+            letter-spacing: 4px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .login-box button:hover {
+            opacity: 0.85;
+        }
+
+        #login-error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* SIDEBAR */
+        #sidebar {
+            width: var(--sidebar-w);
+            background: var(--card);
+            border-left: 1px solid var(--border);
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .sidebar-logo h1 {
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .sidebar-logo span {
+            font-size: 0.7rem;
+            color: var(--muted);
+            display: block;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
+
+        .nav-section-title {
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 8px 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+        }
+
+        .nav-item:hover {
+            background: var(--card2);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: var(--primary-glow);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sidebar-footer button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        /* MAIN CONTENT */
+        #main {
+            margin-right: var(--sidebar-w);
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* HEADER */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .page-header h2 {
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-header h2 i {
+            color: var(--primary);
+        }
+
+        /* STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .stat-info h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* ADD FORM */
+        .add-form-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .add-form-card h3 {
+            margin-bottom: 16px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-form-card h3 i {
+            color: var(--secondary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card2);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .btn-warning {
+            background: var(--secondary);
+            color: #000;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        /* TABLE */
+        .table-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-input {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card2);
+            color: var(--text);
+            font-size: 0.85rem;
+            width: 220px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            padding: 12px 16px;
+            background: var(--card2);
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .data-table img {
+            width: 48px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .data-table .vid-thumb {
+            width: 80px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-blue {
+            background: rgba(37, 99, 235, 0.2);
+            color: #60a5fa;
+        }
+
+        .badge-green {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .badge-yellow {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+
+        .badge-pink {
+            background: rgba(236, 72, 153, 0.2);
+            color: #f472b6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            opacity: 0.4;
+        }
+
+        /* ALERT */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        /* KIDS SECTION MANAGER */
+        .kids-section-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .kids-sec-card {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .kids-sec-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .kids-sec-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .kids-vid-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .kids-vid-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+
+        .kids-vid-item img {
+            width: 60px;
+            height: 34px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .kids-vid-item span {
+            flex: 1;
+        }
+
+        .kids-vid-item button {
+            flex-shrink: 0;
+        }
+
+        /* TOAST */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 0.9rem;
+            z-index: 9998;
+            transition: transform 0.3s;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* YOUTUBE URL HELPER */
+        .yt-preview {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 10px;
+            padding: 10px;
+            background: var(--card2);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .yt-preview img {
+            width: 80px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .yt-preview span {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .yt-preview.hidden {
+            display: none;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+            #sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            #main {
+                margin-right: 0;
+                padding: 16px;
+            }
+        }
+
+        .color-badge {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 20px 0;
+        }
+
+        .youtube-url-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .youtube-url-row .form-group {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h2>لوحة التحكم</h2>
+            <p>أدخل كلمة المرور للدخول</p>
+            <input type="password" id="pwd-input" placeholder="••••••••"
+                onkeydown="if(event.key==='Enter') doLogin()" />
+            <button onclick="doLogin()"><i class="fa-solid fa-unlock"></i> دخول</button>
+            <div id="login-error">كلمة المرور غير صحيحة!</div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast"></div>
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar">
+        <div class="sidebar-logo">
+            <i class="fa-solid fa-gear"></i>
+            <h1>لوحة التحكم <span>دار الكلمة Admin</span></h1>
+        </div>
+        <div class="sidebar-nav">
+            <div class="nav-section-title">الرئيسية</div>
+            <button class="nav-item active" onclick="showPage('dashboard')">
+                <i class="fa-solid fa-chart-pie"></i> لوحة المعلومات
+            </button>
+            <div class="nav-section-title">إدارة المحتوى</div>
+            <button class="nav-item" onclick="showPage('books')">
+                <i class="fa-solid fa-book"></i> الكتب
+            </button>
+            <button class="nav-item" onclick="showPage('courses')">
+                <i class="fa-solid fa-graduation-cap"></i> الكورسات
+            </button>
+            <button class="nav-item" onclick="showPage('church-videos')">
+                <i class="fa-solid fa-clapperboard"></i> فيديوهات الكنيسة
+            </button>
+            <button class="nav-item" onclick="showPage('podcast')">
+                <i class="fa-solid fa-microphone"></i> البودكاست
+            </button>
+            <button class="nav-item" onclick="showPage('kids')">
+                <i class="fa-solid fa-child"></i> ركن الأطفال
+            </button>
+        </div>
+        <div class="sidebar-footer">
+            <button onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="main">
+
+        <!-- ===== DASHBOARD PAGE ===== -->
+        <div id="page-dashboard" class="page active">
+            <div class="page-header">
+                <h2><i class="fa-solid fa-chart-pie"></i> لوحة المعلومات</h2>
+            </div>
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(37,99,235,0.2);color:#60a5fa"><i
+                            class="fa-solid fa-book"></i></div>
+                    <div class="stat-info">
+                        <h3 id="s-books">...</h3>
+                        <p>كتاب</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(245,158,11,0.2);color:#fcd34d"><i
+                            class="fa-solid fa-graduation-cap"></i></div>
+                    <div class="stat-info">
+                        <h3 id="s-courses">...</h3>
+                        <p>كورس</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(16,185,129,0.2);color:#34d399"><i
+                            class="fa-solid fa-clapperboard"></i></div>
+                    <div class="stat-info">
+                        <h3 id="s-videos">...</h3>
+                        <p>فيديو كنسي</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(236,72,153,0.2);color:#f472b6"><i
+                            class="fa-solid fa-microphone"></i></div>
+                    <div class="stat-info">
+                        <h3 id="s-pods">...</h3>
+                        <p>حلقة بودكاست</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(168,85,247,0.2);color:#c084fc"><i
+                            class="fa-solid fa-child"></i></div>
+                    <div class="stat-info">
+                        <h3 id="s-kids">...</h3>
+                        <p>فيديو أطفال</p>
+                    </div>
+                </div>
+            </div>
+            <div class="add-form-card"
+                style="background:linear-gradient(135deg,rgba(37,99,235,0.1),rgba(37,99,235,0.05))">
+                <h3><i class="fa-solid fa-circle-info"></i> مرحباً بك في لوحة التحكم</h3>
+                <p style="color:var(--muted);margin-top:8px;font-size:0.9rem">استخدم القائمة الجانبية للتنقل بين أقسام
+                    الموقع وإدارتها بالكامل. يمكنك إضافة محتوى جديد، تعديله، أو حذفه في أي وقت.</p>
+            </div>
+        </div>
+
+        <!-- ===== BOOKS PAGE ===== -->
+        <div id="page-books" class="page">
+            <div class="page-header">
+                <h2><i class="fa-solid fa-book"></i> إدارة الكتب</h2>
+            </div>
+            <div class="alert alert-success" id="books-alert"></div>
+            <div class="add-form-card">
+                <h3><i class="fa-solid fa-plus-circle"></i> إضافة كتاب جديد</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>عنوان الكتاب *</label>
+                        <input type="text" id="b-title" placeholder="اسم الكتاب" />
+                    </div>
+                    <div class="form-group">
+                        <label>التصنيف *</label>
+                        <input type="text" id="b-category" placeholder="مثال: لاهوت، تفسير..." />
+                    </div>
+                    <div class="form-group">
+                        <label>رابط صورة الغلاف</label>
+                        <input type="text" id="b-image" placeholder="https://..." />
+                    </div>
+                    <div class="form-group">
+                        <label>رابط صفحة الكتاب</label>
+                        <input type="text" id="b-url" placeholder="https://..." />
+                    </div>
+                    <div class="form-group">
+                        <label>رابط التحميل المباشر</label>
+                        <input type="text" id="b-download" placeholder="https://..." />
+                    </div>
+                </div>
+                <div style="margin-top:16px">
+                    <button class="btn btn-primary" onclick="addBook()"><i class="fa-solid fa-plus"></i> إضافة
+                        الكتاب</button>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fa-solid fa-list"></i> قائمة الكتب (<span id="books-count">0</span>)</h3>
+                    <input type="text" class="search-input" placeholder="بحث في الكتب..."
+                        oninput="filterTable('books-tbody', this.value)" />
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الغلاف</th>
+                                <th>العنوان</th>
+                                <th>التصنيف</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="books-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== COURSES PAGE ===== -->
+        <div id="page-courses" class="page">
+            <div class="page-header">
+                <h2><i class="fa-solid fa-graduation-cap"></i> إدارة الكورسات</h2>
+            </div>
+            <div class="alert alert-success" id="courses-alert"></div>
+            <div class="add-form-card">
+                <h3><i class="fa-solid fa-plus-circle"></i> إضافة كورس جديد</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>اسم الكورس *</label>
+                        <input type="text" id="c-title" placeholder="اسم الكورس" />
+                    </div>
+                    <div class="form-group">
+                        <label>اسم المدرب</label>
+                        <input type="text" id="c-instructor" placeholder="اسم المدرب" />
+                    </div>
+                    <div class="form-group">
+                        <label>عدد الدروس</label>
+                        <input type="text" id="c-lessons" placeholder="مثال: 24 درس" />
+                    </div>
+                    <div class="form-group">
+                        <label>التصنيف</label>
+                        <input type="text" id="c-category" placeholder="مثال: برمجة، لغات..." />
+                    </div>
+                    <div class="form-group">
+                        <label>رابط صورة الكورس</label>
+                        <input type="text" id="c-image" placeholder="https://..." />
+                    </div>
+                    <div class="form-group">
+                        <label>رابط الكورس الأصلي</label>
+                        <input type="text" id="c-url" placeholder="https://..." />
+                    </div>
+                </div>
+                <div style="margin-top:16px">
+                    <button class="btn btn-primary" onclick="addCourse()"><i class="fa-solid fa-plus"></i> إضافة
+                        الكورس</button>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fa-solid fa-list"></i> قائمة الكورسات (<span id="courses-count">0</span>)</h3>
+                    <input type="text" class="search-input" placeholder="بحث في الكورسات..."
+                        oninput="filterTable('courses-tbody', this.value)" />
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الصورة</th>
+                                <th>الاسم</th>
+                                <th>المدرب</th>
+                                <th>التصنيف</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="courses-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CHURCH VIDEOS PAGE ===== -->
+        <div id="page-church-videos" class="page">
+            <div class="page-header">
+                <h2><i class="fa-solid fa-clapperboard"></i> فيديوهات الكنيسة</h2>
+            </div>
+            <div class="alert alert-success" id="cv-alert"></div>
+            <div class="add-form-card">
+                <h3><i class="fa-solid fa-plus-circle"></i> إضافة فيديو كنسي</h3>
+                <div class="youtube-url-row">
+                    <div class="form-group" style="flex:2">
+                        <label>رابط يوتيوب أو معرف الفيديو *</label>
+                        <input type="text" id="cv-url"
+                            placeholder="https://www.youtube.com/watch?v=... أو Video ID مباشرة"
+                            oninput="previewYT('cv-url','cv-preview')" />
+                    </div>
+                    <button class="btn btn-warning btn-sm" onclick="extractYTId('cv-url')" style="margin-bottom:2px"><i
+                            class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
+                </div>
+                <div class="yt-preview hidden" id="cv-preview">
+                    <img id="cv-preview-img" src="" alt="preview" />
+                    <span id="cv-preview-id"></span>
+                </div>
+                <div class="form-grid" style="margin-top:14px">
+                    <div class="form-group">
+                        <label>عنوان الفيديو *</label>
+                        <input type="text" id="cv-title" placeholder="عنوان الفيديو" />
+                    </div>
+                    <div class="form-group">
+                        <label>المجموعة / القسم</label>
+                        <input type="text" id="cv-collection" placeholder="مثال: ألحان قبطية، ترانيم..." />
+                    </div>
+                </div>
+                <div style="margin-top:16px">
+                    <button class="btn btn-primary" onclick="addChurchVideo()"><i class="fa-solid fa-plus"></i> إضافة
+                        الفيديو</button>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fa-solid fa-list"></i> فيديوهات الكنيسة (<span id="cv-count">0</span>)</h3>
+                    <input type="text" class="search-input" placeholder="بحث..."
+                        oninput="filterTable('cv-tbody', this.value)" />
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>المعاينة</th>
+                                <th>العنوان</th>
+                                <th>القسم</th>
+                                <th>معرف الفيديو</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cv-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PODCAST PAGE ===== -->
+        <div id="page-podcast" class="page">
+            <div class="page-header">
+                <h2><i class="fa-solid fa-microphone"></i> إدارة البودكاست</h2>
+            </div>
+            <div class="alert alert-success" id="pod-alert"></div>
+            <div class="add-form-card">
+                <h3><i class="fa-solid fa-plus-circle"></i> إضافة حلقة بودكاست</h3>
+                <div class="youtube-url-row">
+                    <div class="form-group" style="flex:2">
+                        <label>رابط يوتيوب أو معرف الفيديو *</label>
+                        <input type="text" id="pod-url" placeholder="https://www.youtube.com/watch?v=..."
+                            oninput="previewYT('pod-url','pod-preview')" />
+                    </div>
+                    <button class="btn btn-warning btn-sm" onclick="extractYTId('pod-url')" style="margin-bottom:2px"><i
+                            class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
+                </div>
+                <div class="yt-preview hidden" id="pod-preview">
+                    <img id="pod-preview-img" src="" alt="preview" />
+                    <span id="pod-preview-id"></span>
+                </div>
+                <div class="form-grid" style="margin-top:14px">
+                    <div class="form-group">
+                        <label>عنوان الحلقة *</label>
+                        <input type="text" id="pod-ep-title" placeholder="عنوان الحلقة" />
+                    </div>
+                    <div class="form-group">
+                        <label>اسم السلسلة / البودكاست</label>
+                        <input type="text" id="pod-series" placeholder="مثال: بودكاست مدرسة الإسكندرية" />
+                    </div>
+                </div>
+                <div style="margin-top:16px">
+                    <button class="btn btn-primary" onclick="addPodcast()"><i class="fa-solid fa-plus"></i> إضافة
+                        الحلقة</button>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fa-solid fa-list"></i> حلقات البودكاست (<span id="pod-count">0</span>)</h3>
+                    <input type="text" class="search-input" placeholder="بحث..."
+                        oninput="filterTable('pod-tbody', this.value)" />
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>المعاينة</th>
+                                <th>عنوان الحلقة</th>
+                                <th>السلسلة</th>
+                                <th>معرف الفيديو</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pod-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== KIDS PAGE ===== -->
+        <div id="page-kids" class="page">
+            <div class="page-header">
+                <h2><i class="fa-solid fa-child"></i> ركن الأطفال</h2>
+            </div>
+            <div class="alert alert-success" id="kids-alert"></div>
+            <div class="add-form-card">
+                <h3><i class="fa-solid fa-plus-circle"></i> إضافة فيديو أطفال</h3>
+                <div class="youtube-url-row">
+                    <div class="form-group" style="flex:2">
+                        <label>رابط يوتيوب أو معرف الفيديو *</label>
+                        <input type="text" id="kids-url" placeholder="https://www.youtube.com/watch?v=..."
+                            oninput="previewYT('kids-url','kids-preview')" />
+                    </div>
+                    <button class="btn btn-warning btn-sm" onclick="extractYTId('kids-url')"
+                        style="margin-bottom:2px"><i class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
+                </div>
+                <div class="yt-preview hidden" id="kids-preview">
+                    <img id="kids-preview-img" src="" alt="preview" />
+                    <span id="kids-preview-id"></span>
+                </div>
+                <div class="form-grid" style="margin-top:14px">
+                    <div class="form-group">
+                        <label>عنوان الفيديو *</label>
+                        <input type="text" id="kids-vid-title" placeholder="عنوان الفيديو" />
+                    </div>
+                    <div class="form-group">
+                        <label>اسم القسم *</label>
+                        <input type="text" id="kids-section" placeholder="مثال: قصص الكتاب المقدس، كارتون..." />
+                    </div>
+                    <div class="form-group">
+                        <label>أيقونة القسم (Font Awesome)</label>
+                        <input type="text" id="kids-icon" placeholder="fa-book-bible" value="fa-star" />
+                    </div>
+                    <div class="form-group">
+                        <label>لون القسم</label>
+                        <input type="color" id="kids-color" value="#4caf50" style="height:42px;padding:4px" />
+                    </div>
+                </div>
+                <div style="margin-top:16px">
+                    <button class="btn btn-primary" onclick="addKidsVideo()"><i class="fa-solid fa-plus"></i> إضافة
+                        الفيديو</button>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fa-solid fa-list"></i> فيديوهات الأطفال (<span id="kids-count">0</span>)</h3>
+                    <input type="text" class="search-input" placeholder="بحث..."
+                        oninput="filterTable('kids-tbody', this.value)" />
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>المعاينة</th>
+                                <th>العنوان</th>
+                                <th>القسم</th>
+                                <th>معرف الفيديو</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kids-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const ADMIN_PASSWORD = 'admin2024';
+        const API = 'https://dar-al-kalima-backend.onrender.com/api';
+
+        // ===== LOGIN =====
+        function doLogin() {
+            const pwd = document.getElementById('pwd-input').value;
+            if (pwd === ADMIN_PASSWORD) {
+                document.getElementById('login-overlay').style.display = 'none';
+                loadAllData();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+                document.getElementById('pwd-input').value = '';
+            }
+        }
+        function logout() {
+            location.reload();
+        }
+
+        // ===== NAVIGATION =====
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // ===== TOAST =====
+        function showToast(msg, success = true) {
+            const t = document.getElementById('toast');
+            t.innerHTML = `<i class="fa-solid ${success ? 'fa-check-circle' : 'fa-circle-xmark'}" style="color:${success ? 'var(--success)' : 'var(--danger)'}"></i> ${msg}`;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ===== YOUTUBE UTILS =====
+        function extractYTIdFromUrl(url) {
+            if (!url) return '';
+            const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            if (match) return match[1];
+            if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) return url.trim();
+            return '';
+        }
+
+        function extractYTId(inputId) {
+            const input = document.getElementById(inputId);
+            const id = extractYTIdFromUrl(input.value);
+            if (id) { input.value = id; previewYT(inputId, inputId.replace('-url', '-preview')); }
+        }
+
+        function previewYT(inputId, previewId) {
+            const val = document.getElementById(inputId).value;
+            const id = extractYTIdFromUrl(val);
+            const previewEl = document.getElementById(previewId);
+            if (id && previewEl) {
+                previewEl.classList.remove('hidden');
+                document.getElementById(previewId + '-img').src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+                document.getElementById(previewId + '-id').textContent = 'معرف الفيديو: ' + id;
+            } else if (previewEl) {
+                previewEl.classList.add('hidden');
+            }
+        }
+
+        // ===== FILTER TABLE =====
+        function filterTable(tbodyId, query) {
+            const q = query.toLowerCase();
+            document.querySelectorAll(`#${tbodyId} tr`).forEach(tr => {
+                tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+            });
+        }
+
+        // ===== LOAD ALL DATA =====
+        async function loadAllData() {
+            await Promise.all([loadBooks(), loadCourses(), loadChurchVideos(), loadPodcasts(), loadKidsVideos()]);
+        }
+
+        // ===== BOOKS =====
+        let allBooks = [];
+        async function loadBooks() {
+            try {
+                const res = await fetch(`${API}/books`);
+                allBooks = await res.json();
+                document.getElementById('s-books').textContent = allBooks.length;
+                document.getElementById('books-count').textContent = allBooks.length;
+                renderBooksTable();
+            } catch (e) { console.error(e); }
+        }
+        function renderBooksTable() {
+            const tbody = document.getElementById('books-tbody');
+            if (!allBooks.length) {
+                tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><i class="fa-solid fa-book"></i><p>لا توجد كتب</p></div></td></tr>`;
+                return;
+            }
+            tbody.innerHTML = allBooks.map(b => `
+      <tr>
+        <td><img src="${b.image || 'https://via.placeholder.com/48x60?text=📖'}" onerror="this.src='https://via.placeholder.com/48x60'" /></td>
+        <td><strong>${b.title}</strong></td>
+        <td><span class="badge badge-blue">${b.category || 'عام'}</span></td>
+        <td><button class="btn btn-danger btn-sm" onclick="deleteBook(${b.id})"><i class="fa-solid fa-trash"></i></button></td>
+      </tr>`).join('');
+        }
+        async function addBook() {
+            const title = document.getElementById('b-title').value.trim();
+            const category = document.getElementById('b-category').value.trim();
+            const image = document.getElementById('b-image').value.trim();
+            const url = document.getElementById('b-url').value.trim();
+            const download_url = document.getElementById('b-download').value.trim();
+            if (!title) return showToast('يرجى إدخال عنوان الكتاب', false);
+            try {
+                const res = await fetch(`${API}/books`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, category, image, url, download_url }) });
+                if (res.ok) {
+                    showToast('تمت إضافة الكتاب بنجاح ✅');
+                    ['b-title', 'b-category', 'b-image', 'b-url', 'b-download'].forEach(id => document.getElementById(id).value = '');
+                    loadBooks();
+                }
+            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+        }
+        async function deleteBook(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الكتاب؟')) return;
+            const res = await fetch(`${API}/books/${id}`, { method: 'DELETE' });
+            if (res.ok) { showToast('تم حذف الكتاب'); loadBooks(); }
+        }
+
+        // ===== COURSES =====
+        async function loadCourses() {
+            try {
+                const res = await fetch(`${API}/courses`);
+                const data = await res.json();
+                document.getElementById('s-courses').textContent = data.length;
+                document.getElementById('courses-count').textContent = data.length;
+                const tbody = document.getElementById('courses-tbody');
+                if (!data.length) {
+                    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-graduation-cap"></i><p>لا توجد كورسات</p></div></td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = data.map(c => `
+        <tr>
+          <td><img src="${c.image || ''}" onerror="this.src='https://via.placeholder.com/48x60'" /></td>
+          <td><strong>${c.title}</strong></td>
+          <td>${c.instructor || '-'}</td>
+          <td><span class="badge badge-yellow">${c.category || 'عام'}</span></td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteCourse(${c.id})"><i class="fa-solid fa-trash"></i></button></td>
+        </tr>`).join('');
+            } catch (e) { console.error(e); }
+        }
+        async function addCourse() {
+            const title = document.getElementById('c-title').value.trim();
+            const instructor = document.getElementById('c-instructor').value.trim();
+            const lessons = document.getElementById('c-lessons').value.trim();
+            const category = document.getElementById('c-category').value.trim();
+            const image = document.getElementById('c-image').value.trim();
+            const url = document.getElementById('c-url').value.trim();
+            if (!title) return showToast('يرجى إدخال اسم الكورس', false);
+            try {
+                const res = await fetch(`${API}/courses`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, instructor, lessons, category, image, url }) });
+                if (res.ok) {
+                    showToast('تمت إضافة الكورس بنجاح ✅');
+                    ['c-title', 'c-instructor', 'c-lessons', 'c-category', 'c-image', 'c-url'].forEach(id => document.getElementById(id).value = '');
+                    loadCourses();
+                }
+            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+        }
+        async function deleteCourse(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الكورس؟')) return;
+            const res = await fetch(`${API}/courses/${id}`, { method: 'DELETE' });
+            if (res.ok) { showToast('تم حذف الكورس'); loadCourses(); }
+        }
+
+        // ===== CHURCH VIDEOS =====
+        async function loadChurchVideos() {
+            try {
+                const res = await fetch(`${API}/church-videos`);
+                const data = await res.json();
+                document.getElementById('s-videos').textContent = data.length;
+                document.getElementById('cv-count').textContent = data.length;
+                const tbody = document.getElementById('cv-tbody');
+                if (!data.length) {
+                    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-clapperboard"></i><p>لا توجد فيديوهات</p></div></td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = data.map(v => `
+        <tr>
+          <td><img class="vid-thumb" src="https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg" /></td>
+          <td><strong>${v.title}</strong></td>
+          <td><span class="badge badge-green">${v.collection || '-'}</span></td>
+          <td><code style="font-size:0.75rem;background:var(--card2);padding:2px 6px;border-radius:4px">${v.videoId}</code></td>
+          <td>
+            <button class="btn btn-primary btn-sm" onclick="window.open('https://youtube.com/watch?v=${v.videoId}','_blank')"><i class="fa-solid fa-play"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteChurchVideo(${v.id})"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>`).join('');
+            } catch (e) { console.error(e); }
+        }
+        async function addChurchVideo() {
+            const rawUrl = document.getElementById('cv-url').value.trim();
+            const videoId = extractYTIdFromUrl(rawUrl);
+            const title = document.getElementById('cv-title').value.trim();
+            const collection = document.getElementById('cv-collection').value.trim();
+            if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
+            if (!title) return showToast('يرجى إدخال عنوان الفيديو', false);
+            try {
+                const res = await fetch(`${API}/church-videos`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, videoId, collection }) });
+                if (res.ok) {
+                    showToast('تمت إضافة الفيديو بنجاح ✅');
+                    ['cv-url', 'cv-title', 'cv-collection'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('cv-preview').classList.add('hidden');
+                    loadChurchVideos();
+                }
+            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+        }
+        async function deleteChurchVideo(id) {
+            if (!confirm('حذف هذا الفيديو؟')) return;
+            const res = await fetch(`${API}/church-videos/${id}`, { method: 'DELETE' });
+            if (res.ok) { showToast('تم الحذف'); loadChurchVideos(); }
+        }
+
+        // ===== PODCASTS =====
+        async function loadPodcasts() {
+            try {
+                const res = await fetch(`${API}/podcasts`);
+                const data = await res.json();
+                document.getElementById('s-pods').textContent = data.length;
+                document.getElementById('pod-count').textContent = data.length;
+                const tbody = document.getElementById('pod-tbody');
+                if (!data.length) {
+                    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-microphone"></i><p>لا توجد حلقات</p></div></td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = data.map(p => `
+        <tr>
+          <td><img class="vid-thumb" src="https://img.youtube.com/vi/${p.videoId}/mqdefault.jpg" /></td>
+          <td><strong>${p.episodeTitle || p.title || '-'}</strong></td>
+          <td><span class="badge badge-pink">${p.seriesTitle || '-'}</span></td>
+          <td><code style="font-size:0.75rem;background:var(--card2);padding:2px 6px;border-radius:4px">${p.videoId}</code></td>
+          <td>
+            <button class="btn btn-primary btn-sm" onclick="window.open('https://youtube.com/watch?v=${p.videoId}','_blank')"><i class="fa-solid fa-play"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deletePodcast(${p.id})"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>`).join('');
+            } catch (e) { console.error(e); }
+        }
+        async function addPodcast() {
+            const rawUrl = document.getElementById('pod-url').value.trim();
+            const videoId = extractYTIdFromUrl(rawUrl);
+            const episodeTitle = document.getElementById('pod-ep-title').value.trim();
+            const seriesTitle = document.getElementById('pod-series').value.trim();
+            if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
+            if (!episodeTitle) return showToast('يرجى إدخال عنوان الحلقة', false);
+            try {
+                const res = await fetch(`${API}/podcasts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ seriesTitle, episodeTitle, videoId }) });
+                if (res.ok) {
+                    showToast('تمت إضافة الحلقة بنجاح ✅');
+                    ['pod-url', 'pod-ep-title', 'pod-series'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('pod-preview').classList.add('hidden');
+                    loadPodcasts();
+                }
+            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+        }
+        async function deletePodcast(id) {
+            if (!confirm('حذف هذه الحلقة؟')) return;
+            const res = await fetch(`${API}/podcasts/${id}`, { method: 'DELETE' });
+            if (res.ok) { showToast('تم الحذف'); loadPodcasts(); }
+        }
+
+        // ===== KIDS VIDEOS =====
+        async function loadKidsVideos() {
+            try {
+                const res = await fetch(`${API}/kids-videos`);
+                const data = await res.json();
+                document.getElementById('s-kids').textContent = data.length;
+                document.getElementById('kids-count').textContent = data.length;
+                const tbody = document.getElementById('kids-tbody');
+                if (!data.length) {
+                    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-child"></i><p>لا توجد فيديوهات</p></div></td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = data.map(v => `
+        <tr>
+          <td><img class="vid-thumb" src="https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg" /></td>
+          <td><strong>${v.title}</strong></td>
+          <td>
+            <span class="color-badge" style="background:${v.color || '#4caf50'}"></span>
+            <i class="fa-solid ${v.icon || 'fa-star'}" style="color:${v.color || '#4caf50'}"></i>
+            ${v.sectionTitle || '-'}
+          </td>
+          <td><code style="font-size:0.75rem;background:var(--card2);padding:2px 6px;border-radius:4px">${v.videoId}</code></td>
+          <td>
+            <button class="btn btn-primary btn-sm" onclick="window.open('https://youtube.com/watch?v=${v.videoId}','_blank')"><i class="fa-solid fa-play"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteKidsVideo(${v.id})"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>`).join('');
+            } catch (e) { console.error(e); }
+        }
+        async function addKidsVideo() {
+            const rawUrl = document.getElementById('kids-url').value.trim();
+            const videoId = extractYTIdFromUrl(rawUrl);
+            const title = document.getElementById('kids-vid-title').value.trim();
+            const sectionTitle = document.getElementById('kids-section').value.trim();
+            const icon = document.getElementById('kids-icon').value.trim() || 'fa-star';
+            const color = document.getElementById('kids-color').value || '#4caf50';
+            if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
+            if (!title) return showToast('يرجى إدخال عنوان الفيديو', false);
+            if (!sectionTitle) return showToast('يرجى إدخال اسم القسم', false);
+            try {
+                const res = await fetch(`${API}/kids-videos`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sectionTitle, title, videoId, icon, color }) });
+                if (res.ok) {
+                    showToast('تمت إضافة الفيديو بنجاح ✅');
+                    ['kids-url', 'kids-vid-title', 'kids-section'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('kids-icon').value = 'fa-star';
+                    document.getElementById('kids-preview').classList.add('hidden');
+                    loadKidsVideos();
+                }
+            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+        }
+        async function deleteKidsVideo(id) {
+            if (!confirm('حذف هذا الفيديو؟')) return;
+            const res = await fetch(`${API}/kids-videos/${id}`, { method: 'DELETE' });
+            if (res.ok) { showToast('تم الحذف'); loadKidsVideos(); }
+        }
+
+        // Focus password on load
+        window.addEventListener('load', () => document.getElementById('pwd-input').focus());
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+# robots.txt - دار الكلمة | المكتبة المسيحية الشاملة
+# https://daralkalam.com/
+
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin
+
+# Allow important bots explicitly
+User-agent: Googlebot
+Allow: /
+Disallow: /admin.html
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin.html
+
+# Sitemap location
+Sitemap: https://daralkalam.com/sitemap.xml

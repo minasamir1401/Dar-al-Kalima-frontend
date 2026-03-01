@@ -1,0 +1,20 @@
+[
+    {
+        "title": "دورة تعلم البرمجة بلغة C Plus Plus",
+        "instructor": "محمد شوشان",
+        "lessons": "55 درس",
+        "duration": "11 س 27 د",
+        "image": "https://www.m3aarf.com/storage/images/677117ca7ea75.jpg",
+        "url": "https://www.m3aarf.com/certificate/36/البرمجة-بلغة-C-Plus-Plus-video",
+        "category": "برمجة"
+    },
+    {
+        "title": "لغة الترميز HTML في تصميم المواقع",
+        "instructor": "M3aarf",
+        "lessons": "32 درس",
+        "duration": "5 س 30 د",
+        "image": "https://www.m3aarf.com/storage/images/677117ca32aa2.jpg",
+        "url": "https://www.m3aarf.com/certificate/23/كورس-اساسيات-html-كامل-شرح-عربى-للمبتدئيين-video",
+        "category": "برمجة"
+    }
+]
