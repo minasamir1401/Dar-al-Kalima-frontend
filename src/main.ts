@@ -432,7 +432,7 @@ class LibraryApp {
       <div class="book-grid mb-12">
         ${latestBooks.map(book => `
           <div class="book-card glass" onclick="app.viewBook('${book.url}')" style="cursor: pointer;">
-            <img src="${book.image}" alt="${book.title}" class="book-img" loading="lazy">
+            <img src="${book.image}" alt="غلاف كتاب ${book.title}" class="book-img" loading="lazy">
             <div class="book-info">
               <div class="book-title text-sm">${book.title}</div>
             </div>
@@ -451,7 +451,7 @@ class LibraryApp {
       <div class="book-grid mb-12">
         ${latestCourses.map(course => `
           <div class="book-card glass" onclick="app.renderPlayer(${JSON.stringify(course).replace(/"/g, '&quot;')})" style="cursor: pointer;">
-            <img src="${course.image}" alt="${course.title}" class="book-img" loading="lazy">
+            <img src="${course.image}" alt="صورة دورة ${course.title}" class="book-img" loading="lazy">
             <div class="book-info">
               <div class="book-title text-sm text-center">${course.title}</div>
             </div>
@@ -475,7 +475,7 @@ class LibraryApp {
           <div class="grid gap-4">
              <div class="media-item flex gap-4 items-center p-4 rounded-2xl cursor-pointer" onclick="app.playChurchVideo('zld51r43YyU', 'لحن ابؤرو الفرايحى')">
                 <div class="relative flex-shrink-0">
-                  <img src="https://img.youtube.com/vi/zld51r43YyU/mqdefault.jpg" class="media-thumb">
+                  <img src="https://img.youtube.com/vi/zld51r43YyU/mqdefault.jpg" alt="فيديو لحن ابؤرو الفرايحى" class="media-thumb" loading="lazy">
                   <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                     <i class="fa-solid fa-play text-white text-xl"></i>
                   </div>
@@ -488,7 +488,7 @@ class LibraryApp {
 
              <div class="media-item flex gap-4 items-center p-4 rounded-2xl cursor-pointer" onclick="app.playChurchVideo('ImMBzlYYqFQ', 'فتشوا الكتب - الحلقة الأولى')">
                 <div class="relative flex-shrink-0">
-                  <img src="https://img.youtube.com/vi/ImMBzlYYqFQ/mqdefault.jpg" class="media-thumb">
+                  <img src="https://img.youtube.com/vi/ImMBzlYYqFQ/mqdefault.jpg" alt="فيديو فتشوا الكتب الحلقة الأولى" class="media-thumb" loading="lazy">
                 </div>
                 <div class="media-content">
                   <div class="media-title">فتشوا الكتب - الحلقة ١</div>
@@ -498,7 +498,7 @@ class LibraryApp {
 
              <div class="media-item flex gap-4 items-center p-4 rounded-2xl cursor-pointer" onclick="app.playChurchVideo('PcS-9LS0XZI', 'ترنيمة امسك يا رب ايدي')">
                 <div class="relative flex-shrink-0">
-                  <img src="https://img.youtube.com/vi/PcS-9LS0XZI/mqdefault.jpg" class="media-thumb">
+                  <img src="https://img.youtube.com/vi/PcS-9LS0XZI/mqdefault.jpg" alt="فيديو ترنيمة مسيحية" class="media-thumb" loading="lazy">
                 </div>
                 <div class="media-content">
                   <div class="media-title">ترنيمة امسك يا رب ايدي</div>
@@ -647,7 +647,7 @@ class LibraryApp {
     this.gridContainer.innerHTML = items.map(book => `
       <div class="book-card glass fade-in" onclick="app.viewBook('${book.url}')" style="cursor: pointer;">
         <div class="book-tag">${book.category || 'عام'}</div>
-        <img src="${book.image}" alt="${book.title}" class="book-img" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400?text=Book'">
+        <img src="${book.image}" alt="كتاب ${book.title}" class="book-img" loading="lazy" onerror="this.src='https://placehold.co/300x400/1e3c72/ffffff?text=Book'">
         <div class="book-info">
           <div class="book-title" title="${book.title}">${book.title}</div>
           <div class="book-actions">
@@ -674,7 +674,7 @@ class LibraryApp {
       <div class="glass p-8 rounded-[28px] fade-in">
         <div class="flex flex-col md:flex-row gap-8">
           <div class="w-full md:w-1/3 lg:w-1/4">
-             <img src="${book.image}" alt="${book.title}" class="w-full rounded-[20px] shadow-lg mb-4" onerror="this.src='https://via.placeholder.com/300x400?text=Book'">
+             <img src="${book.image}" alt="غلاف مكبر لكتاب ${book.title}" class="w-full rounded-[20px] shadow-lg mb-4" loading="lazy" onerror="this.src='https://placehold.co/300x400/1e3c72/ffffff?text=Book'">
              <div class="book-tag secondary static-important text-center mb-4">${book.category || 'عام'}</div>
           </div>
           <div class="w-full md:w-2/3 lg:w-3/4">
@@ -709,7 +709,7 @@ class LibraryApp {
     this.gridContainer.innerHTML = courses.map(course => `
       <div class="book-card glass fade-in" onclick="app.viewCourse(${course.id})" style="cursor: pointer;">
         <div class="book-tag secondary">${course.category}</div>
-        <img src="${course.image}" alt="${course.title}" class="book-img" loading="lazy">
+        <img src="${course.image}" alt="دورة ${course.title}" class="book-img" loading="lazy" onerror="this.src='https://placehold.co/400x250/1e3c72/ffffff?text=Course'">
         <div class="book-info">
           <div class="book-title" title="${course.title}">${course.title}</div>
           <div class="instructor"><i class="fa-solid fa-user-tie"></i> ${course.instructor}</div>

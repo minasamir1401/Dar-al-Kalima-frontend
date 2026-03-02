@@ -116,8 +116,15 @@
   <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
   <link rel="dns-prefetch" href="https://www.youtube.com" />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <!-- ===== Styles ===== -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </noscript>
   <link rel="stylesheet" href="/style.css" />
 </head>
 
@@ -158,7 +165,7 @@
       <div class="nav-content">
         <div class="logo-container">
           <img src="/logo.png" alt="شعار دار الكلمة - المكتبة المسيحية الشاملة" class="logo-img"
-            style="height: 45px; border-radius: 8px;" width="45" height="45">
+            style="height: 45px; width: auto; border-radius: 8px;" height="45">
           <span class="logo-text">دار الكلمة</span>
         </div>
 
@@ -172,12 +179,12 @@
                   class="fa-solid fa-house" aria-hidden="true"></i> الرئيسية</a></li>
             <li><a href="#books" data-page="books" aria-label="تصفح جميع الكتب المسيحية"><i
                   class="fa-solid fa-cross spiritual-cross" aria-hidden="true"></i> جميع الكتب</a></li>
-            <li><a href="#courses" data-page="courses" aria-label="الدورات والتعليم"><i
-                  class="fa-solid fa-graduation-cap" aria-hidden="true"></i> الدورات والتعليم</a></li>
             <li><a href="#church-videos" data-page="church-videos" aria-label="فيديوهات كنيستي"><i
                   class="fa-solid fa-dove spiritual-cross" aria-hidden="true"></i> فيديوهات كنيستي</a></li>
             <li><a href="#podcast" data-page="podcast" aria-label="البودكاست الروحي"><i
                   class="fa-solid fa-microphone-lines spiritual-cross" aria-hidden="true"></i> بودكاست</a></li>
+            <li><a href="#courses" data-page="courses" aria-label="الدورات والتعليم"><i
+                  class="fa-solid fa-graduation-cap" aria-hidden="true"></i> الدورات والتعليم</a></li>
             <li><a href="#kids" data-page="kids" aria-label="ركن الأطفال"><i class="fa-solid fa-child"
                   aria-hidden="true"></i> ركن الأطفال</a></li>
           </ul>
