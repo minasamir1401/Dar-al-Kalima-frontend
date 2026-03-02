@@ -1,3 +1,14 @@
+// ============================================================
+//  Developer Signature
+// ============================================================
+console.log(
+  '%c Mina Sami | مينا سمير %c\n%c Developer & Creator of Dar Al-Kalima Website\n📱 01279301263 ',
+  'background: linear-gradient(135deg, #1a237e, #283593); color: #fff; font-size: 18px; font-weight: bold; padding: 10px 20px; border-radius: 8px 8px 0 0;',
+  '',
+  'background: #0d1117; color: #58a6ff; font-size: 12px; padding: 6px 20px 10px; border-radius: 0 0 8px 8px; border: 1px solid #30363d; border-top: none;'
+);
+console.log('%c © 2025 Dar Al-Kalima | موقع دار الكلمة ', 'color: #888; font-size: 11px;');
+
 interface Book {
   title: string;
   url: string;

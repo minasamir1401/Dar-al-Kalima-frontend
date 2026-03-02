@@ -34,6 +34,11 @@
             background: var(--bg);
             color: var(--text);
             font-family: 'Segoe UI', Tahoma, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .admin-container {
             display: flex;
             min-height: 100vh;
         }
@@ -643,16 +648,119 @@
 
         /* RESPONSIVE */
         @media(max-width:768px) {
+            .mobile-header {
+                display: flex !important;
+                /* Ensure it overrides any other display settings */
+            }
+
             #sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1001;
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+                width: 280px;
+                position: fixed;
+                /* Must be fixed on mobile */
+                height: 100vh;
+            }
+
+            #sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-close-btn {
+                display: flex !important;
             }
 
             #main {
-                margin-right: 0;
+                margin-right: 0 !important;
                 padding: 16px;
+                width: 100%;
             }
+
+            .admin-container {
+                display: block !important;
+                /* Switch from flex to block on mobile for vertical stacking */
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            @media(min-width:400px) {
+                .stats-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+        }
+
+        .sidebar-close-btn {
+            display: none;
+            width: 32px;
+            height: 32px;
+            align-items: center;
+            justify-content: center;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+            margin-right: auto;
+            /* Push to the opposite side from logo */
+        }
+
+        .mobile-header {
+            display: none;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .mobile-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .mobile-header .logo i {
+            color: var(--primary);
+        }
+
+        .menu-btn {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        #sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #sidebar-overlay.show {
+            display: block;
+            opacity: 1;
         }
 
         .color-badge {
@@ -683,6 +791,8 @@
 </head>
 
 <body>
+    <!-- SIDEBAR OVERLAY -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <!-- LOGIN OVERLAY -->
     <div id="login-overlay">
@@ -700,541 +810,601 @@
     <!-- TOAST -->
     <div id="toast"></div>
 
-    <!-- SIDEBAR -->
-    <nav id="sidebar">
-        <div class="sidebar-logo">
+    <!-- MOBILE HEADER -->
+    <header class="mobile-header">
+        <div class="logo">
             <i class="fa-solid fa-gear"></i>
-            <h1>لوحة التحكم <span>دار الكلمة Admin</span></h1>
+            <span>لوحة التحكم</span>
         </div>
-        <div class="sidebar-nav">
-            <div class="nav-section-title">الرئيسية</div>
-            <button class="nav-item active" onclick="showPage('dashboard')">
-                <i class="fa-solid fa-chart-pie"></i> لوحة المعلومات
-            </button>
-            <div class="nav-section-title">إدارة المحتوى</div>
-            <button class="nav-item" onclick="showPage('books')">
-                <i class="fa-solid fa-book"></i> الكتب
-            </button>
-            <button class="nav-item" onclick="showPage('courses')">
-                <i class="fa-solid fa-graduation-cap"></i> الكورسات
-            </button>
-            <button class="nav-item" onclick="showPage('church-videos')">
-                <i class="fa-solid fa-clapperboard"></i> فيديوهات الكنيسة
-            </button>
-            <button class="nav-item" onclick="showPage('podcast')">
-                <i class="fa-solid fa-microphone"></i> البودكاست
-            </button>
-            <button class="nav-item" onclick="showPage('kids')">
-                <i class="fa-solid fa-child"></i> ركن الأطفال
-            </button>
-        </div>
-        <div class="sidebar-footer">
-            <button onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
-        </div>
-    </nav>
+        <button class="menu-btn" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </header>
 
-    <!-- MAIN CONTENT -->
-    <main id="main">
+    <div class="admin-container">
+        <!-- TOAST -->
+        <div id="toast"></div>
 
-        <!-- ===== DASHBOARD PAGE ===== -->
-        <div id="page-dashboard" class="page active">
-            <div class="page-header">
-                <h2><i class="fa-solid fa-chart-pie"></i> لوحة المعلومات</h2>
+        <!-- SIDEBAR -->
+        <nav id="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-gear"></i>
+                <h1>لوحة التحكم <span>دار الكلمة Admin</span></h1>
+                <button class="sidebar-close-btn" onclick="toggleSidebar(false)">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
-            <div class="stats-grid" id="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(37,99,235,0.2);color:#60a5fa"><i
-                            class="fa-solid fa-book"></i></div>
-                    <div class="stat-info">
-                        <h3 id="s-books">...</h3>
-                        <p>كتاب</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(245,158,11,0.2);color:#fcd34d"><i
-                            class="fa-solid fa-graduation-cap"></i></div>
-                    <div class="stat-info">
-                        <h3 id="s-courses">...</h3>
-                        <p>كورس</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(16,185,129,0.2);color:#34d399"><i
-                            class="fa-solid fa-clapperboard"></i></div>
-                    <div class="stat-info">
-                        <h3 id="s-videos">...</h3>
-                        <p>فيديو كنسي</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(236,72,153,0.2);color:#f472b6"><i
-                            class="fa-solid fa-microphone"></i></div>
-                    <div class="stat-info">
-                        <h3 id="s-pods">...</h3>
-                        <p>حلقة بودكاست</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(168,85,247,0.2);color:#c084fc"><i
-                            class="fa-solid fa-child"></i></div>
-                    <div class="stat-info">
-                        <h3 id="s-kids">...</h3>
-                        <p>فيديو أطفال</p>
-                    </div>
-                </div>
+            <div class="sidebar-nav">
+                <div class="nav-section-title">الرئيسية</div>
+                <button class="nav-item active" onclick="showPage('dashboard')">
+                    <i class="fa-solid fa-chart-pie"></i> لوحة المعلومات
+                </button>
+                <div class="nav-section-title">إدارة المحتوى</div>
+                <button class="nav-item" onclick="showPage('books')">
+                    <i class="fa-solid fa-book"></i> الكتب
+                </button>
+                <button class="nav-item" onclick="showPage('courses')">
+                    <i class="fa-solid fa-graduation-cap"></i> الكورسات
+                </button>
+                <button class="nav-item" onclick="showPage('church-videos')">
+                    <i class="fa-solid fa-clapperboard"></i> فيديوهات الكنيسة
+                </button>
+                <button class="nav-item" onclick="showPage('podcast')">
+                    <i class="fa-solid fa-microphone"></i> البودكاست
+                </button>
+                <button class="nav-item" onclick="showPage('kids')">
+                    <i class="fa-solid fa-child"></i> ركن الأطفال
+                </button>
             </div>
-            <div class="add-form-card"
-                style="background:linear-gradient(135deg,rgba(37,99,235,0.1),rgba(37,99,235,0.05))">
-                <h3><i class="fa-solid fa-circle-info"></i> مرحباً بك في لوحة التحكم</h3>
-                <p style="color:var(--muted);margin-top:8px;font-size:0.9rem">استخدم القائمة الجانبية للتنقل بين أقسام
-                    الموقع وإدارتها بالكامل. يمكنك إضافة محتوى جديد، تعديله، أو حذفه في أي وقت.</p>
+            <div class="sidebar-footer">
+                <button onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
             </div>
-        </div>
+        </nav>
 
-        <!-- ===== BOOKS PAGE ===== -->
-        <div id="page-books" class="page">
-            <div class="page-header">
-                <h2><i class="fa-solid fa-book"></i> إدارة الكتب</h2>
-            </div>
-            <div class="alert alert-success" id="books-alert"></div>
-            <div class="add-form-card">
-                <h3><i class="fa-solid fa-plus-circle"></i> إضافة كتاب جديد</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>عنوان الكتاب *</label>
-                        <input type="text" id="b-title" placeholder="اسم الكتاب" />
-                    </div>
-                    <div class="form-group">
-                        <label>التصنيف *</label>
-                        <input type="text" id="b-category" placeholder="مثال: لاهوت، تفسير..." />
-                    </div>
-                    <div class="form-group">
-                        <label>رابط صورة الغلاف</label>
-                        <input type="text" id="b-image" placeholder="https://..." />
-                    </div>
-                    <div class="form-group">
-                        <label>رابط صفحة الكتاب</label>
-                        <input type="text" id="b-url" placeholder="https://..." />
-                    </div>
-                    <div class="form-group">
-                        <label>رابط التحميل المباشر</label>
-                        <input type="text" id="b-download" placeholder="https://..." />
-                    </div>
-                </div>
-                <div style="margin-top:16px">
-                    <button class="btn btn-primary" onclick="addBook()"><i class="fa-solid fa-plus"></i> إضافة
-                        الكتاب</button>
-                </div>
-            </div>
-            <div class="table-card">
-                <div class="table-header">
-                    <h3><i class="fa-solid fa-list"></i> قائمة الكتب (<span id="books-count">0</span>)</h3>
-                    <input type="text" class="search-input" placeholder="بحث في الكتب..."
-                        oninput="filterTable('books-tbody', this.value)" />
-                </div>
-                <div style="overflow-x:auto">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>الغلاف</th>
-                                <th>العنوان</th>
-                                <th>التصنيف</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="books-tbody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <!-- MAIN CONTENT -->
+        <main id="main">
 
-        <!-- ===== COURSES PAGE ===== -->
-        <div id="page-courses" class="page">
-            <div class="page-header">
-                <h2><i class="fa-solid fa-graduation-cap"></i> إدارة الكورسات</h2>
-            </div>
-            <div class="alert alert-success" id="courses-alert"></div>
-            <div class="add-form-card">
-                <h3><i class="fa-solid fa-plus-circle"></i> إضافة كورس جديد</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>اسم الكورس *</label>
-                        <input type="text" id="c-title" placeholder="اسم الكورس" />
+            <!-- ===== DASHBOARD PAGE ===== -->
+            <div id="page-dashboard" class="page active">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-chart-pie"></i> لوحة المعلومات</h2>
+                </div>
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:rgba(37,99,235,0.2);color:#60a5fa"><i
+                                class="fa-solid fa-book"></i></div>
+                        <div class="stat-info">
+                            <h3 id="s-books">...</h3>
+                            <p>كتاب</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>اسم المدرب</label>
-                        <input type="text" id="c-instructor" placeholder="اسم المدرب" />
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:rgba(245,158,11,0.2);color:#fcd34d"><i
+                                class="fa-solid fa-graduation-cap"></i></div>
+                        <div class="stat-info">
+                            <h3 id="s-courses">...</h3>
+                            <p>كورس</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>عدد الدروس</label>
-                        <input type="text" id="c-lessons" placeholder="مثال: 24 درس" />
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:rgba(16,185,129,0.2);color:#34d399"><i
+                                class="fa-solid fa-clapperboard"></i></div>
+                        <div class="stat-info">
+                            <h3 id="s-videos">...</h3>
+                            <p>فيديو كنسي</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>التصنيف</label>
-                        <input type="text" id="c-category" placeholder="مثال: برمجة، لغات..." />
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:rgba(236,72,153,0.2);color:#f472b6"><i
+                                class="fa-solid fa-microphone"></i></div>
+                        <div class="stat-info">
+                            <h3 id="s-pods">...</h3>
+                            <p>حلقة بودكاست</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>رابط صورة الكورس</label>
-                        <input type="text" id="c-image" placeholder="https://..." />
-                    </div>
-                    <div class="form-group">
-                        <label>رابط الكورس الأصلي</label>
-                        <input type="text" id="c-url" placeholder="https://..." />
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:rgba(168,85,247,0.2);color:#c084fc"><i
+                                class="fa-solid fa-child"></i></div>
+                        <div class="stat-info">
+                            <h3 id="s-kids">...</h3>
+                            <p>فيديو أطفال</p>
+                        </div>
                     </div>
                 </div>
-                <div style="margin-top:16px">
-                    <button class="btn btn-primary" onclick="addCourse()"><i class="fa-solid fa-plus"></i> إضافة
-                        الكورس</button>
-                </div>
-            </div>
-            <div class="table-card">
-                <div class="table-header">
-                    <h3><i class="fa-solid fa-list"></i> قائمة الكورسات (<span id="courses-count">0</span>)</h3>
-                    <input type="text" class="search-input" placeholder="بحث في الكورسات..."
-                        oninput="filterTable('courses-tbody', this.value)" />
-                </div>
-                <div style="overflow-x:auto">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>الصورة</th>
-                                <th>الاسم</th>
-                                <th>المدرب</th>
-                                <th>التصنيف</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="courses-tbody"></tbody>
-                    </table>
+                <div class="add-form-card"
+                    style="background:linear-gradient(135deg,rgba(37,99,235,0.1),rgba(37,99,235,0.05))">
+                    <h3><i class="fa-solid fa-circle-info"></i> مرحباً بك في لوحة التحكم</h3>
+                    <p style="color:var(--muted);margin-top:8px;font-size:0.9rem">استخدم القائمة الجانبية للتنقل بين
+                        أقسام
+                        الموقع وإدارتها بالكامل. يمكنك إضافة محتوى جديد، تعديله، أو حذفه في أي وقت.</p>
                 </div>
             </div>
-        </div>
 
-        <!-- ===== CHURCH VIDEOS PAGE ===== -->
-        <div id="page-church-videos" class="page">
-            <div class="page-header">
-                <h2><i class="fa-solid fa-clapperboard"></i> فيديوهات الكنيسة</h2>
-            </div>
-            <div class="alert alert-success" id="cv-alert"></div>
-            <div class="add-form-card">
-                <h3><i class="fa-solid fa-plus-circle"></i> إضافة فيديو كنسي</h3>
-                <div class="youtube-url-row">
-                    <div class="form-group" style="flex:2">
-                        <label>رابط يوتيوب أو معرف الفيديو *</label>
-                        <input type="text" id="cv-url"
-                            placeholder="https://www.youtube.com/watch?v=... أو Video ID مباشرة"
-                            oninput="previewYT('cv-url','cv-preview')" />
+            <!-- ===== BOOKS PAGE ===== -->
+            <div id="page-books" class="page">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-book"></i> إدارة الكتب</h2>
+                </div>
+                <div class="alert alert-success" id="books-alert"></div>
+                <div class="add-form-card">
+                    <h3><i class="fa-solid fa-plus-circle"></i> إضافة كتاب جديد</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>عنوان الكتاب *</label>
+                            <input type="text" id="b-title" placeholder="اسم الكتاب" />
+                        </div>
+                        <div class="form-group">
+                            <label>التصنيف *</label>
+                            <input type="text" id="b-category" placeholder="مثال: لاهوت، تفسير..." />
+                        </div>
+                        <div class="form-group">
+                            <label>رابط صورة الغلاف</label>
+                            <input type="text" id="b-image" placeholder="https://..." />
+                        </div>
+                        <div class="form-group">
+                            <label>رابط صفحة الكتاب</label>
+                            <input type="text" id="b-url" placeholder="https://..." />
+                        </div>
+                        <div class="form-group">
+                            <label>رابط التحميل المباشر</label>
+                            <input type="text" id="b-download" placeholder="https://..." />
+                        </div>
                     </div>
-                    <button class="btn btn-warning btn-sm" onclick="extractYTId('cv-url')" style="margin-bottom:2px"><i
-                            class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
-                </div>
-                <div class="yt-preview hidden" id="cv-preview">
-                    <img id="cv-preview-img" src="" alt="preview" />
-                    <span id="cv-preview-id"></span>
-                </div>
-                <div class="form-grid" style="margin-top:14px">
-                    <div class="form-group">
-                        <label>عنوان الفيديو *</label>
-                        <input type="text" id="cv-title" placeholder="عنوان الفيديو" />
-                    </div>
-                    <div class="form-group">
-                        <label>المجموعة / القسم</label>
-                        <input type="text" id="cv-collection" placeholder="مثال: ألحان قبطية، ترانيم..." />
+                    <div style="margin-top:16px">
+                        <button class="btn btn-primary" onclick="addBook()"><i class="fa-solid fa-plus"></i> إضافة
+                            الكتاب</button>
                     </div>
                 </div>
-                <div style="margin-top:16px">
-                    <button class="btn btn-primary" onclick="addChurchVideo()"><i class="fa-solid fa-plus"></i> إضافة
-                        الفيديو</button>
-                </div>
-            </div>
-            <div class="table-card">
-                <div class="table-header">
-                    <h3><i class="fa-solid fa-list"></i> فيديوهات الكنيسة (<span id="cv-count">0</span>)</h3>
-                    <input type="text" class="search-input" placeholder="بحث..."
-                        oninput="filterTable('cv-tbody', this.value)" />
-                </div>
-                <div style="overflow-x:auto">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>المعاينة</th>
-                                <th>العنوان</th>
-                                <th>القسم</th>
-                                <th>معرف الفيديو</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cv-tbody"></tbody>
-                    </table>
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3><i class="fa-solid fa-list"></i> قائمة الكتب (<span id="books-count">0</span>)</h3>
+                        <input type="text" class="search-input" placeholder="بحث في الكتب..."
+                            oninput="filterTable('books-tbody', this.value)" />
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>الغلاف</th>
+                                    <th>العنوان</th>
+                                    <th>التصنيف</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="books-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- ===== PODCAST PAGE ===== -->
-        <div id="page-podcast" class="page">
-            <div class="page-header">
-                <h2><i class="fa-solid fa-microphone"></i> إدارة البودكاست</h2>
-            </div>
-            <div class="alert alert-success" id="pod-alert"></div>
-            <div class="add-form-card">
-                <h3><i class="fa-solid fa-plus-circle"></i> إضافة حلقة بودكاست</h3>
-                <div class="youtube-url-row">
-                    <div class="form-group" style="flex:2">
-                        <label>رابط يوتيوب أو معرف الفيديو *</label>
-                        <input type="text" id="pod-url" placeholder="https://www.youtube.com/watch?v=..."
-                            oninput="previewYT('pod-url','pod-preview')" />
+            <!-- ===== COURSES PAGE ===== -->
+            <div id="page-courses" class="page">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-graduation-cap"></i> إدارة الكورسات</h2>
+                </div>
+                <div class="alert alert-success" id="courses-alert"></div>
+                <div class="add-form-card">
+                    <h3><i class="fa-solid fa-plus-circle"></i> إضافة كورس جديد</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>اسم الكورس *</label>
+                            <input type="text" id="c-title" placeholder="اسم الكورس" />
+                        </div>
+                        <div class="form-group">
+                            <label>اسم المدرب</label>
+                            <input type="text" id="c-instructor" placeholder="اسم المدرب" />
+                        </div>
+                        <div class="form-group">
+                            <label>عدد الدروس</label>
+                            <input type="text" id="c-lessons" placeholder="مثال: 24 درس" />
+                        </div>
+                        <div class="form-group">
+                            <label>التصنيف</label>
+                            <input type="text" id="c-category" placeholder="مثال: برمجة، لغات..." />
+                        </div>
+                        <div class="form-group">
+                            <label>رابط صورة الكورس</label>
+                            <input type="text" id="c-image" placeholder="https://..." />
+                        </div>
+                        <div class="form-group">
+                            <label>رابط الكورس الأصلي</label>
+                            <input type="text" id="c-url" placeholder="https://..." />
+                        </div>
                     </div>
-                    <button class="btn btn-warning btn-sm" onclick="extractYTId('pod-url')" style="margin-bottom:2px"><i
-                            class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
-                </div>
-                <div class="yt-preview hidden" id="pod-preview">
-                    <img id="pod-preview-img" src="" alt="preview" />
-                    <span id="pod-preview-id"></span>
-                </div>
-                <div class="form-grid" style="margin-top:14px">
-                    <div class="form-group">
-                        <label>عنوان الحلقة *</label>
-                        <input type="text" id="pod-ep-title" placeholder="عنوان الحلقة" />
-                    </div>
-                    <div class="form-group">
-                        <label>اسم السلسلة / البودكاست</label>
-                        <input type="text" id="pod-series" placeholder="مثال: بودكاست مدرسة الإسكندرية" />
+                    <div style="margin-top:16px">
+                        <button class="btn btn-primary" onclick="addCourse()"><i class="fa-solid fa-plus"></i> إضافة
+                            الكورس</button>
                     </div>
                 </div>
-                <div style="margin-top:16px">
-                    <button class="btn btn-primary" onclick="addPodcast()"><i class="fa-solid fa-plus"></i> إضافة
-                        الحلقة</button>
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3><i class="fa-solid fa-list"></i> قائمة الكورسات (<span id="courses-count">0</span>)</h3>
+                        <input type="text" class="search-input" placeholder="بحث في الكورسات..."
+                            oninput="filterTable('courses-tbody', this.value)" />
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>الصورة</th>
+                                    <th>الاسم</th>
+                                    <th>المدرب</th>
+                                    <th>التصنيف</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courses-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="table-card">
-                <div class="table-header">
-                    <h3><i class="fa-solid fa-list"></i> حلقات البودكاست (<span id="pod-count">0</span>)</h3>
-                    <input type="text" class="search-input" placeholder="بحث..."
-                        oninput="filterTable('pod-tbody', this.value)" />
-                </div>
-                <div style="overflow-x:auto">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>المعاينة</th>
-                                <th>عنوان الحلقة</th>
-                                <th>السلسلة</th>
-                                <th>معرف الفيديو</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pod-tbody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
 
-        <!-- ===== KIDS PAGE ===== -->
-        <div id="page-kids" class="page">
-            <div class="page-header">
-                <h2><i class="fa-solid fa-child"></i> ركن الأطفال</h2>
-            </div>
-            <div class="alert alert-success" id="kids-alert"></div>
-            <div class="add-form-card">
-                <h3><i class="fa-solid fa-plus-circle"></i> إضافة فيديو أطفال</h3>
-                <div class="youtube-url-row">
-                    <div class="form-group" style="flex:2">
-                        <label>رابط يوتيوب أو معرف الفيديو *</label>
-                        <input type="text" id="kids-url" placeholder="https://www.youtube.com/watch?v=..."
-                            oninput="previewYT('kids-url','kids-preview')" />
-                    </div>
-                    <button class="btn btn-warning btn-sm" onclick="extractYTId('kids-url')"
-                        style="margin-bottom:2px"><i class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
+            <!-- ===== CHURCH VIDEOS PAGE ===== -->
+            <div id="page-church-videos" class="page">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-clapperboard"></i> فيديوهات الكنيسة</h2>
                 </div>
-                <div class="yt-preview hidden" id="kids-preview">
-                    <img id="kids-preview-img" src="" alt="preview" />
-                    <span id="kids-preview-id"></span>
-                </div>
-                <div class="form-grid" style="margin-top:14px">
-                    <div class="form-group">
-                        <label>عنوان الفيديو *</label>
-                        <input type="text" id="kids-vid-title" placeholder="عنوان الفيديو" />
+                <div class="alert alert-success" id="cv-alert"></div>
+                <div class="add-form-card">
+                    <h3><i class="fa-solid fa-plus-circle"></i> إضافة فيديو كنسي</h3>
+                    <div class="youtube-url-row">
+                        <div class="form-group" style="flex:2">
+                            <label>رابط يوتيوب أو معرف الفيديو *</label>
+                            <input type="text" id="cv-url"
+                                placeholder="https://www.youtube.com/watch?v=... أو Video ID مباشرة"
+                                oninput="previewYT('cv-url','cv-preview')" />
+                        </div>
+                        <button class="btn btn-warning btn-sm" onclick="extractYTId('cv-url')"
+                            style="margin-bottom:2px"><i class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
                     </div>
-                    <div class="form-group">
-                        <label>اسم القسم *</label>
-                        <input type="text" id="kids-section" placeholder="مثال: قصص الكتاب المقدس، كارتون..." />
+                    <div class="yt-preview hidden" id="cv-preview">
+                        <img id="cv-preview-img" src="" alt="preview" />
+                        <span id="cv-preview-id"></span>
                     </div>
-                    <div class="form-group">
-                        <label>أيقونة القسم (Font Awesome)</label>
-                        <input type="text" id="kids-icon" placeholder="fa-book-bible" value="fa-star" />
+                    <div class="form-grid" style="margin-top:14px">
+                        <div class="form-group">
+                            <label>عنوان الفيديو *</label>
+                            <input type="text" id="cv-title" placeholder="عنوان الفيديو" />
+                        </div>
+                        <div class="form-group">
+                            <label>المجموعة / القسم</label>
+                            <input type="text" id="cv-collection" placeholder="مثال: ألحان قبطية، ترانيم..." />
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>لون القسم</label>
-                        <input type="color" id="kids-color" value="#4caf50" style="height:42px;padding:4px" />
+                    <div style="margin-top:16px">
+                        <button class="btn btn-primary" onclick="addChurchVideo()"><i class="fa-solid fa-plus"></i>
+                            إضافة
+                            الفيديو</button>
                     </div>
                 </div>
-                <div style="margin-top:16px">
-                    <button class="btn btn-primary" onclick="addKidsVideo()"><i class="fa-solid fa-plus"></i> إضافة
-                        الفيديو</button>
-                </div>
-            </div>
-            <div class="table-card">
-                <div class="table-header">
-                    <h3><i class="fa-solid fa-list"></i> فيديوهات الأطفال (<span id="kids-count">0</span>)</h3>
-                    <input type="text" class="search-input" placeholder="بحث..."
-                        oninput="filterTable('kids-tbody', this.value)" />
-                </div>
-                <div style="overflow-x:auto">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>المعاينة</th>
-                                <th>العنوان</th>
-                                <th>القسم</th>
-                                <th>معرف الفيديو</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="kids-tbody"></tbody>
-                    </table>
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3><i class="fa-solid fa-list"></i> فيديوهات الكنيسة (<span id="cv-count">0</span>)</h3>
+                        <input type="text" class="search-input" placeholder="بحث..."
+                            oninput="filterTable('cv-tbody', this.value)" />
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>المعاينة</th>
+                                    <th>العنوان</th>
+                                    <th>القسم</th>
+                                    <th>معرف الفيديو</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cv-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </main>
+            <!-- ===== PODCAST PAGE ===== -->
+            <div id="page-podcast" class="page">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-microphone"></i> إدارة البودكاست</h2>
+                </div>
+                <div class="alert alert-success" id="pod-alert"></div>
+                <div class="add-form-card">
+                    <h3><i class="fa-solid fa-plus-circle"></i> إضافة حلقة بودكاست</h3>
+                    <div class="youtube-url-row">
+                        <div class="form-group" style="flex:2">
+                            <label>رابط يوتيوب أو معرف الفيديو *</label>
+                            <input type="text" id="pod-url" placeholder="https://www.youtube.com/watch?v=..."
+                                oninput="previewYT('pod-url','pod-preview')" />
+                        </div>
+                        <button class="btn btn-warning btn-sm" onclick="extractYTId('pod-url')"
+                            style="margin-bottom:2px"><i class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
+                    </div>
+                    <div class="yt-preview hidden" id="pod-preview">
+                        <img id="pod-preview-img" src="" alt="preview" />
+                        <span id="pod-preview-id"></span>
+                    </div>
+                    <div class="form-grid" style="margin-top:14px">
+                        <div class="form-group">
+                            <label>عنوان الحلقة *</label>
+                            <input type="text" id="pod-ep-title" placeholder="عنوان الحلقة" />
+                        </div>
+                        <div class="form-group">
+                            <label>اسم السلسلة / البودكاست</label>
+                            <input type="text" id="pod-series" placeholder="مثال: بودكاست مدرسة الإسكندرية" />
+                        </div>
+                    </div>
+                    <div style="margin-top:16px">
+                        <button class="btn btn-primary" onclick="addPodcast()"><i class="fa-solid fa-plus"></i> إضافة
+                            الحلقة</button>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3><i class="fa-solid fa-list"></i> حلقات البودكاست (<span id="pod-count">0</span>)</h3>
+                        <input type="text" class="search-input" placeholder="بحث..."
+                            oninput="filterTable('pod-tbody', this.value)" />
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>المعاينة</th>
+                                    <th>عنوان الحلقة</th>
+                                    <th>السلسلة</th>
+                                    <th>معرف الفيديو</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pod-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-    <script>
-        const ADMIN_PASSWORD = 'admin2024';
-        //           https://dar-al-kalima-backend.onrender.com/api
-        const API = 'https://dar-al-kalima-backend.onrender.com/api';
+            <!-- ===== KIDS PAGE ===== -->
+            <div id="page-kids" class="page">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-child"></i> ركن الأطفال</h2>
+                </div>
+                <div class="alert alert-success" id="kids-alert"></div>
+                <div class="add-form-card">
+                    <h3><i class="fa-solid fa-plus-circle"></i> إضافة فيديو أطفال</h3>
+                    <div class="youtube-url-row">
+                        <div class="form-group" style="flex:2">
+                            <label>رابط يوتيوب أو معرف الفيديو *</label>
+                            <input type="text" id="kids-url" placeholder="https://www.youtube.com/watch?v=..."
+                                oninput="previewYT('kids-url','kids-preview')" />
+                        </div>
+                        <button class="btn btn-warning btn-sm" onclick="extractYTId('kids-url')"
+                            style="margin-bottom:2px"><i class="fa-solid fa-wand-magic-sparkles"></i> استخراج</button>
+                    </div>
+                    <div class="yt-preview hidden" id="kids-preview">
+                        <img id="kids-preview-img" src="" alt="preview" />
+                        <span id="kids-preview-id"></span>
+                    </div>
+                    <div class="form-grid" style="margin-top:14px">
+                        <div class="form-group">
+                            <label>عنوان الفيديو *</label>
+                            <input type="text" id="kids-vid-title" placeholder="عنوان الفيديو" />
+                        </div>
+                        <div class="form-group">
+                            <label>اسم القسم *</label>
+                            <input type="text" id="kids-section" placeholder="مثال: قصص الكتاب المقدس، كارتون..." />
+                        </div>
+                        <div class="form-group">
+                            <label>أيقونة القسم (Font Awesome)</label>
+                            <input type="text" id="kids-icon" placeholder="fa-book-bible" value="fa-star" />
+                        </div>
+                        <div class="form-group">
+                            <label>لون القسم</label>
+                            <input type="color" id="kids-color" value="#4caf50" style="height:42px;padding:4px" />
+                        </div>
+                    </div>
+                    <div style="margin-top:16px">
+                        <button class="btn btn-primary" onclick="addKidsVideo()"><i class="fa-solid fa-plus"></i> إضافة
+                            الفيديو</button>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3><i class="fa-solid fa-list"></i> فيديوهات الأطفال (<span id="kids-count">0</span>)</h3>
+                        <input type="text" class="search-input" placeholder="بحث..."
+                            oninput="filterTable('kids-tbody', this.value)" />
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>المعاينة</th>
+                                    <th>العنوان</th>
+                                    <th>القسم</th>
+                                    <th>معرف الفيديو</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kids-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-        // ===== LOGIN =====
-        function doLogin() {
-            const pwd = document.getElementById('pwd-input').value;
-            if (pwd === ADMIN_PASSWORD) {
-                document.getElementById('login-overlay').style.display = 'none';
-                loadAllData();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-                document.getElementById('pwd-input').value = '';
+        </main>
+
+        <script>
+            // ============================================================
+            //  Developer Signature
+            // ============================================================
+            console.log(
+                '%c Mina Sami | مينا سمير %c\n%c Developer & Creator of Dar Al-Kalima Website\n📱 01279301263 ',
+                'background: linear-gradient(135deg, #1a237e, #283593); color: #fff; font-size: 18px; font-weight: bold; padding: 10px 20px; border-radius: 8px 8px 0 0;',
+                '',
+                'background: #0d1117; color: #58a6ff; font-size: 12px; padding: 6px 20px 10px; border-radius: 0 0 8px 8px; border: 1px solid #30363d; border-top: none;'
+            );
+            console.log('%c © 2025 Dar Al-Kalima | موقع دار الكلمة ', 'color: #888; font-size: 11px;');
+
+            const ADMIN_PASSWORD = 'admin2024';
+            //           https://dar-al-kalima-backend.onrender.com/api
+            const API = 'https://dar-al-kalima-backend.onrender.com/api';
+
+            // ===== LOGIN =====
+            function doLogin() {
+                const pwd = document.getElementById('pwd-input').value;
+                if (pwd === ADMIN_PASSWORD) {
+                    document.getElementById('login-overlay').style.display = 'none';
+                    loadAllData();
+                } else {
+                    document.getElementById('login-error').style.display = 'block';
+                    document.getElementById('pwd-input').value = '';
+                }
             }
-        }
-        function logout() {
-            location.reload();
-        }
-
-        // ===== NAVIGATION =====
-        function showPage(page) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('page-' + page).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        // ===== TOAST =====
-        function showToast(msg, success = true) {
-            const t = document.getElementById('toast');
-            t.innerHTML = `<i class="fa-solid ${success ? 'fa-check-circle' : 'fa-circle-xmark'}" style="color:${success ? 'var(--success)' : 'var(--danger)'}"></i> ${msg}`;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
-        }
-
-        // ===== YOUTUBE UTILS =====
-        function extractYTIdFromUrl(url) {
-            if (!url) return '';
-            const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-            if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) return url.trim();
-            return '';
-        }
-
-        function extractYTId(inputId) {
-            const input = document.getElementById(inputId);
-            const id = extractYTIdFromUrl(input.value);
-            if (id) { input.value = id; previewYT(inputId, inputId.replace('-url', '-preview')); }
-        }
-
-        function previewYT(inputId, previewId) {
-            const val = document.getElementById(inputId).value;
-            const id = extractYTIdFromUrl(val);
-            const previewEl = document.getElementById(previewId);
-            if (id && previewEl) {
-                previewEl.classList.remove('hidden');
-                document.getElementById(previewId + '-img').src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
-                document.getElementById(previewId + '-id').textContent = 'معرف الفيديو: ' + id;
-            } else if (previewEl) {
-                previewEl.classList.add('hidden');
+            function logout() {
+                location.reload();
             }
-        }
 
-        // ===== FILTER TABLE =====
-        function filterTable(tbodyId, query) {
-            const q = query.toLowerCase();
-            document.querySelectorAll(`#${tbodyId} tr`).forEach(tr => {
-                tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
-            });
-        }
+            // ===== NAVIGATION =====
+            function showPage(page) {
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                document.getElementById('page-' + page).classList.add('active');
 
-        // ===== LOAD ALL DATA =====
-        async function loadAllData() {
-            await Promise.all([loadBooks(), loadCourses(), loadChurchVideos(), loadPodcasts(), loadKidsVideos()]);
-        }
+                // Handle multiple menu items (desktop/mobile if any)
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    if (item.getAttribute('onclick').includes(`'${page}'`)) {
+                        item.classList.add('active');
+                    }
+                });
 
-        // ===== BOOKS =====
-        let allBooks = [];
-        async function loadBooks() {
-            try {
-                const res = await fetch(`${API}/books`);
-                allBooks = await res.json();
-                document.getElementById('s-books').textContent = allBooks.length;
-                document.getElementById('books-count').textContent = allBooks.length;
-                renderBooksTable();
-            } catch (e) { console.error(e); }
-        }
-        function renderBooksTable() {
-            const tbody = document.getElementById('books-tbody');
-            if (!allBooks.length) {
-                tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><i class="fa-solid fa-book"></i><p>لا توجد كتب</p></div></td></tr>`;
-                return;
+                if (window.innerWidth <= 768) {
+                    toggleSidebar(false);
+                }
             }
-            tbody.innerHTML = allBooks.map(b => `
+
+            function toggleSidebar(show) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                const isOpen = sidebar.classList.contains('open');
+
+                const shouldShow = show !== undefined ? show : !isOpen;
+
+                if (shouldShow) {
+                    sidebar.classList.add('open');
+                    overlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            // ===== TOAST =====
+            function showToast(msg, success = true) {
+                const t = document.getElementById('toast');
+                t.innerHTML = `<i class="fa-solid ${success ? 'fa-check-circle' : 'fa-circle-xmark'}" style="color:${success ? 'var(--success)' : 'var(--danger)'}"></i> ${msg}`;
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 3000);
+            }
+
+            // ===== YOUTUBE UTILS =====
+            function extractYTIdFromUrl(url) {
+                if (!url) return '';
+                const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                if (match) return match[1];
+                if (/^[a-zA-Z0-9_-]{11}$/.test(url.trim())) return url.trim();
+                return '';
+            }
+
+            function extractYTId(inputId) {
+                const input = document.getElementById(inputId);
+                const id = extractYTIdFromUrl(input.value);
+                if (id) { input.value = id; previewYT(inputId, inputId.replace('-url', '-preview')); }
+            }
+
+            function previewYT(inputId, previewId) {
+                const val = document.getElementById(inputId).value;
+                const id = extractYTIdFromUrl(val);
+                const previewEl = document.getElementById(previewId);
+                if (id && previewEl) {
+                    previewEl.classList.remove('hidden');
+                    document.getElementById(previewId + '-img').src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+                    document.getElementById(previewId + '-id').textContent = 'معرف الفيديو: ' + id;
+                } else if (previewEl) {
+                    previewEl.classList.add('hidden');
+                }
+            }
+
+            // ===== FILTER TABLE =====
+            function filterTable(tbodyId, query) {
+                const q = query.toLowerCase();
+                document.querySelectorAll(`#${tbodyId} tr`).forEach(tr => {
+                    tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+                });
+            }
+
+            // ===== LOAD ALL DATA =====
+            async function loadAllData() {
+                await Promise.all([loadBooks(), loadCourses(), loadChurchVideos(), loadPodcasts(), loadKidsVideos()]);
+            }
+
+            // ===== BOOKS =====
+            let allBooks = [];
+            async function loadBooks() {
+                try {
+                    const res = await fetch(`${API}/books`);
+                    allBooks = await res.json();
+                    document.getElementById('s-books').textContent = allBooks.length;
+                    document.getElementById('books-count').textContent = allBooks.length;
+                    renderBooksTable();
+                } catch (e) { console.error(e); }
+            }
+            function renderBooksTable() {
+                const tbody = document.getElementById('books-tbody');
+                if (!allBooks.length) {
+                    tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><i class="fa-solid fa-book"></i><p>لا توجد كتب</p></div></td></tr>`;
+                    return;
+                }
+                tbody.innerHTML = allBooks.map(b => `
       <tr>
         <td><img src="${b.image || 'https://via.placeholder.com/48x60?text=📖'}" onerror="this.src='https://via.placeholder.com/48x60'" /></td>
         <td><strong>${b.title}</strong></td>
         <td><span class="badge badge-blue">${b.category || 'عام'}</span></td>
         <td><button class="btn btn-danger btn-sm" onclick="deleteBook(${b.id})"><i class="fa-solid fa-trash"></i></button></td>
       </tr>`).join('');
-        }
-        async function addBook() {
-            const title = document.getElementById('b-title').value.trim();
-            const category = document.getElementById('b-category').value.trim();
-            const image = document.getElementById('b-image').value.trim();
-            const url = document.getElementById('b-url').value.trim();
-            const download_url = document.getElementById('b-download').value.trim();
-            if (!title) return showToast('يرجى إدخال عنوان الكتاب', false);
-            try {
-                const res = await fetch(`${API}/books`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, category, image, url, download_url }) });
-                if (res.ok) {
-                    showToast('تمت إضافة الكتاب بنجاح ✅');
-                    ['b-title', 'b-category', 'b-image', 'b-url', 'b-download'].forEach(id => document.getElementById(id).value = '');
-                    loadBooks();
-                }
-            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
-        }
-        async function deleteBook(id) {
-            if (!confirm('هل أنت متأكد من حذف هذا الكتاب؟')) return;
-            const res = await fetch(`${API}/books/${id}`, { method: 'DELETE' });
-            if (res.ok) { showToast('تم حذف الكتاب'); loadBooks(); }
-        }
+            }
+            async function addBook() {
+                const title = document.getElementById('b-title').value.trim();
+                const category = document.getElementById('b-category').value.trim();
+                const image = document.getElementById('b-image').value.trim();
+                const url = document.getElementById('b-url').value.trim();
+                const download_url = document.getElementById('b-download').value.trim();
+                if (!title) return showToast('يرجى إدخال عنوان الكتاب', false);
+                try {
+                    const res = await fetch(`${API}/books`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, category, image, url, download_url }) });
+                    if (res.ok) {
+                        showToast('تمت إضافة الكتاب بنجاح ✅');
+                        ['b-title', 'b-category', 'b-image', 'b-url', 'b-download'].forEach(id => document.getElementById(id).value = '');
+                        loadBooks();
+                    }
+                } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+            }
+            async function deleteBook(id) {
+                if (!confirm('هل أنت متأكد من حذف هذا الكتاب؟')) return;
+                const res = await fetch(`${API}/books/${id}`, { method: 'DELETE' });
+                if (res.ok) { showToast('تم حذف الكتاب'); loadBooks(); }
+            }
 
-        // ===== COURSES =====
-        async function loadCourses() {
-            try {
-                const res = await fetch(`${API}/courses`);
-                const data = await res.json();
-                document.getElementById('s-courses').textContent = data.length;
-                document.getElementById('courses-count').textContent = data.length;
-                const tbody = document.getElementById('courses-tbody');
-                if (!data.length) {
-                    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-graduation-cap"></i><p>لا توجد كورسات</p></div></td></tr>`;
-                    return;
-                }
-                tbody.innerHTML = data.map(c => `
+            // ===== COURSES =====
+            async function loadCourses() {
+                try {
+                    const res = await fetch(`${API}/courses`);
+                    const data = await res.json();
+                    document.getElementById('s-courses').textContent = data.length;
+                    document.getElementById('courses-count').textContent = data.length;
+                    const tbody = document.getElementById('courses-tbody');
+                    if (!data.length) {
+                        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-graduation-cap"></i><p>لا توجد كورسات</p></div></td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = data.map(c => `
         <tr>
           <td><img src="${c.image || ''}" onerror="this.src='https://via.placeholder.com/48x60'" /></td>
           <td><strong>${c.title}</strong></td>
@@ -1242,44 +1412,44 @@
           <td><span class="badge badge-yellow">${c.category || 'عام'}</span></td>
           <td><button class="btn btn-danger btn-sm" onclick="deleteCourse(${c.id})"><i class="fa-solid fa-trash"></i></button></td>
         </tr>`).join('');
-            } catch (e) { console.error(e); }
-        }
-        async function addCourse() {
-            const title = document.getElementById('c-title').value.trim();
-            const instructor = document.getElementById('c-instructor').value.trim();
-            const lessons = document.getElementById('c-lessons').value.trim();
-            const category = document.getElementById('c-category').value.trim();
-            const image = document.getElementById('c-image').value.trim();
-            const url = document.getElementById('c-url').value.trim();
-            if (!title) return showToast('يرجى إدخال اسم الكورس', false);
-            try {
-                const res = await fetch(`${API}/courses`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, instructor, lessons, category, image, url }) });
-                if (res.ok) {
-                    showToast('تمت إضافة الكورس بنجاح ✅');
-                    ['c-title', 'c-instructor', 'c-lessons', 'c-category', 'c-image', 'c-url'].forEach(id => document.getElementById(id).value = '');
-                    loadCourses();
-                }
-            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
-        }
-        async function deleteCourse(id) {
-            if (!confirm('هل أنت متأكد من حذف هذا الكورس؟')) return;
-            const res = await fetch(`${API}/courses/${id}`, { method: 'DELETE' });
-            if (res.ok) { showToast('تم حذف الكورس'); loadCourses(); }
-        }
+                } catch (e) { console.error(e); }
+            }
+            async function addCourse() {
+                const title = document.getElementById('c-title').value.trim();
+                const instructor = document.getElementById('c-instructor').value.trim();
+                const lessons = document.getElementById('c-lessons').value.trim();
+                const category = document.getElementById('c-category').value.trim();
+                const image = document.getElementById('c-image').value.trim();
+                const url = document.getElementById('c-url').value.trim();
+                if (!title) return showToast('يرجى إدخال اسم الكورس', false);
+                try {
+                    const res = await fetch(`${API}/courses`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, instructor, lessons, category, image, url }) });
+                    if (res.ok) {
+                        showToast('تمت إضافة الكورس بنجاح ✅');
+                        ['c-title', 'c-instructor', 'c-lessons', 'c-category', 'c-image', 'c-url'].forEach(id => document.getElementById(id).value = '');
+                        loadCourses();
+                    }
+                } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+            }
+            async function deleteCourse(id) {
+                if (!confirm('هل أنت متأكد من حذف هذا الكورس؟')) return;
+                const res = await fetch(`${API}/courses/${id}`, { method: 'DELETE' });
+                if (res.ok) { showToast('تم حذف الكورس'); loadCourses(); }
+            }
 
-        // ===== CHURCH VIDEOS =====
-        async function loadChurchVideos() {
-            try {
-                const res = await fetch(`${API}/church-videos`);
-                const data = await res.json();
-                document.getElementById('s-videos').textContent = data.length;
-                document.getElementById('cv-count').textContent = data.length;
-                const tbody = document.getElementById('cv-tbody');
-                if (!data.length) {
-                    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-clapperboard"></i><p>لا توجد فيديوهات</p></div></td></tr>`;
-                    return;
-                }
-                tbody.innerHTML = data.map(v => `
+            // ===== CHURCH VIDEOS =====
+            async function loadChurchVideos() {
+                try {
+                    const res = await fetch(`${API}/church-videos`);
+                    const data = await res.json();
+                    document.getElementById('s-videos').textContent = data.length;
+                    document.getElementById('cv-count').textContent = data.length;
+                    const tbody = document.getElementById('cv-tbody');
+                    if (!data.length) {
+                        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-clapperboard"></i><p>لا توجد فيديوهات</p></div></td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = data.map(v => `
         <tr>
           <td><img class="vid-thumb" src="https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg" /></td>
           <td><strong>${v.title}</strong></td>
@@ -1290,44 +1460,44 @@
             <button class="btn btn-danger btn-sm" onclick="deleteChurchVideo(${v.id})"><i class="fa-solid fa-trash"></i></button>
           </td>
         </tr>`).join('');
-            } catch (e) { console.error(e); }
-        }
-        async function addChurchVideo() {
-            const rawUrl = document.getElementById('cv-url').value.trim();
-            const videoId = extractYTIdFromUrl(rawUrl);
-            const title = document.getElementById('cv-title').value.trim();
-            const collection = document.getElementById('cv-collection').value.trim();
-            if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
-            if (!title) return showToast('يرجى إدخال عنوان الفيديو', false);
-            try {
-                const res = await fetch(`${API}/church-videos`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, videoId, collection }) });
-                if (res.ok) {
-                    showToast('تمت إضافة الفيديو بنجاح ✅');
-                    ['cv-url', 'cv-title', 'cv-collection'].forEach(id => document.getElementById(id).value = '');
-                    document.getElementById('cv-preview').classList.add('hidden');
-                    loadChurchVideos();
-                }
-            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
-        }
-        async function deleteChurchVideo(id) {
-            if (!confirm('حذف هذا الفيديو؟')) return;
-            const res = await fetch(`${API}/church-videos/${id}`, { method: 'DELETE' });
-            if (res.ok) { showToast('تم الحذف'); loadChurchVideos(); }
-        }
+                } catch (e) { console.error(e); }
+            }
+            async function addChurchVideo() {
+                const rawUrl = document.getElementById('cv-url').value.trim();
+                const videoId = extractYTIdFromUrl(rawUrl);
+                const title = document.getElementById('cv-title').value.trim();
+                const collection = document.getElementById('cv-collection').value.trim();
+                if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
+                if (!title) return showToast('يرجى إدخال عنوان الفيديو', false);
+                try {
+                    const res = await fetch(`${API}/church-videos`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, videoId, collection }) });
+                    if (res.ok) {
+                        showToast('تمت إضافة الفيديو بنجاح ✅');
+                        ['cv-url', 'cv-title', 'cv-collection'].forEach(id => document.getElementById(id).value = '');
+                        document.getElementById('cv-preview').classList.add('hidden');
+                        loadChurchVideos();
+                    }
+                } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+            }
+            async function deleteChurchVideo(id) {
+                if (!confirm('حذف هذا الفيديو؟')) return;
+                const res = await fetch(`${API}/church-videos/${id}`, { method: 'DELETE' });
+                if (res.ok) { showToast('تم الحذف'); loadChurchVideos(); }
+            }
 
-        // ===== PODCASTS =====
-        async function loadPodcasts() {
-            try {
-                const res = await fetch(`${API}/podcasts`);
-                const data = await res.json();
-                document.getElementById('s-pods').textContent = data.length;
-                document.getElementById('pod-count').textContent = data.length;
-                const tbody = document.getElementById('pod-tbody');
-                if (!data.length) {
-                    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-microphone"></i><p>لا توجد حلقات</p></div></td></tr>`;
-                    return;
-                }
-                tbody.innerHTML = data.map(p => `
+            // ===== PODCASTS =====
+            async function loadPodcasts() {
+                try {
+                    const res = await fetch(`${API}/podcasts`);
+                    const data = await res.json();
+                    document.getElementById('s-pods').textContent = data.length;
+                    document.getElementById('pod-count').textContent = data.length;
+                    const tbody = document.getElementById('pod-tbody');
+                    if (!data.length) {
+                        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-microphone"></i><p>لا توجد حلقات</p></div></td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = data.map(p => `
         <tr>
           <td><img class="vid-thumb" src="https://img.youtube.com/vi/${p.videoId}/mqdefault.jpg" /></td>
           <td><strong>${p.episodeTitle || p.title || '-'}</strong></td>
@@ -1338,44 +1508,44 @@
             <button class="btn btn-danger btn-sm" onclick="deletePodcast(${p.id})"><i class="fa-solid fa-trash"></i></button>
           </td>
         </tr>`).join('');
-            } catch (e) { console.error(e); }
-        }
-        async function addPodcast() {
-            const rawUrl = document.getElementById('pod-url').value.trim();
-            const videoId = extractYTIdFromUrl(rawUrl);
-            const episodeTitle = document.getElementById('pod-ep-title').value.trim();
-            const seriesTitle = document.getElementById('pod-series').value.trim();
-            if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
-            if (!episodeTitle) return showToast('يرجى إدخال عنوان الحلقة', false);
-            try {
-                const res = await fetch(`${API}/podcasts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ seriesTitle, episodeTitle, videoId }) });
-                if (res.ok) {
-                    showToast('تمت إضافة الحلقة بنجاح ✅');
-                    ['pod-url', 'pod-ep-title', 'pod-series'].forEach(id => document.getElementById(id).value = '');
-                    document.getElementById('pod-preview').classList.add('hidden');
-                    loadPodcasts();
-                }
-            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
-        }
-        async function deletePodcast(id) {
-            if (!confirm('حذف هذه الحلقة؟')) return;
-            const res = await fetch(`${API}/podcasts/${id}`, { method: 'DELETE' });
-            if (res.ok) { showToast('تم الحذف'); loadPodcasts(); }
-        }
+                } catch (e) { console.error(e); }
+            }
+            async function addPodcast() {
+                const rawUrl = document.getElementById('pod-url').value.trim();
+                const videoId = extractYTIdFromUrl(rawUrl);
+                const episodeTitle = document.getElementById('pod-ep-title').value.trim();
+                const seriesTitle = document.getElementById('pod-series').value.trim();
+                if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
+                if (!episodeTitle) return showToast('يرجى إدخال عنوان الحلقة', false);
+                try {
+                    const res = await fetch(`${API}/podcasts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ seriesTitle, episodeTitle, videoId }) });
+                    if (res.ok) {
+                        showToast('تمت إضافة الحلقة بنجاح ✅');
+                        ['pod-url', 'pod-ep-title', 'pod-series'].forEach(id => document.getElementById(id).value = '');
+                        document.getElementById('pod-preview').classList.add('hidden');
+                        loadPodcasts();
+                    }
+                } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+            }
+            async function deletePodcast(id) {
+                if (!confirm('حذف هذه الحلقة؟')) return;
+                const res = await fetch(`${API}/podcasts/${id}`, { method: 'DELETE' });
+                if (res.ok) { showToast('تم الحذف'); loadPodcasts(); }
+            }
 
-        // ===== KIDS VIDEOS =====
-        async function loadKidsVideos() {
-            try {
-                const res = await fetch(`${API}/kids-videos`);
-                const data = await res.json();
-                document.getElementById('s-kids').textContent = data.length;
-                document.getElementById('kids-count').textContent = data.length;
-                const tbody = document.getElementById('kids-tbody');
-                if (!data.length) {
-                    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-child"></i><p>لا توجد فيديوهات</p></div></td></tr>`;
-                    return;
-                }
-                tbody.innerHTML = data.map(v => `
+            // ===== KIDS VIDEOS =====
+            async function loadKidsVideos() {
+                try {
+                    const res = await fetch(`${API}/kids-videos`);
+                    const data = await res.json();
+                    document.getElementById('s-kids').textContent = data.length;
+                    document.getElementById('kids-count').textContent = data.length;
+                    const tbody = document.getElementById('kids-tbody');
+                    if (!data.length) {
+                        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-child"></i><p>لا توجد فيديوهات</p></div></td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = data.map(v => `
         <tr>
           <td><img class="vid-thumb" src="https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg" /></td>
           <td><strong>${v.title}</strong></td>
@@ -1390,38 +1560,39 @@
             <button class="btn btn-danger btn-sm" onclick="deleteKidsVideo(${v.id})"><i class="fa-solid fa-trash"></i></button>
           </td>
         </tr>`).join('');
-            } catch (e) { console.error(e); }
-        }
-        async function addKidsVideo() {
-            const rawUrl = document.getElementById('kids-url').value.trim();
-            const videoId = extractYTIdFromUrl(rawUrl);
-            const title = document.getElementById('kids-vid-title').value.trim();
-            const sectionTitle = document.getElementById('kids-section').value.trim();
-            const icon = document.getElementById('kids-icon').value.trim() || 'fa-star';
-            const color = document.getElementById('kids-color').value || '#4caf50';
-            if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
-            if (!title) return showToast('يرجى إدخال عنوان الفيديو', false);
-            if (!sectionTitle) return showToast('يرجى إدخال اسم القسم', false);
-            try {
-                const res = await fetch(`${API}/kids-videos`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sectionTitle, title, videoId, icon, color }) });
-                if (res.ok) {
-                    showToast('تمت إضافة الفيديو بنجاح ✅');
-                    ['kids-url', 'kids-vid-title', 'kids-section'].forEach(id => document.getElementById(id).value = '');
-                    document.getElementById('kids-icon').value = 'fa-star';
-                    document.getElementById('kids-preview').classList.add('hidden');
-                    loadKidsVideos();
-                }
-            } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
-        }
-        async function deleteKidsVideo(id) {
-            if (!confirm('حذف هذا الفيديو؟')) return;
-            const res = await fetch(`${API}/kids-videos/${id}`, { method: 'DELETE' });
-            if (res.ok) { showToast('تم الحذف'); loadKidsVideos(); }
-        }
+                } catch (e) { console.error(e); }
+            }
+            async function addKidsVideo() {
+                const rawUrl = document.getElementById('kids-url').value.trim();
+                const videoId = extractYTIdFromUrl(rawUrl);
+                const title = document.getElementById('kids-vid-title').value.trim();
+                const sectionTitle = document.getElementById('kids-section').value.trim();
+                const icon = document.getElementById('kids-icon').value.trim() || 'fa-star';
+                const color = document.getElementById('kids-color').value || '#4caf50';
+                if (!videoId) return showToast('يرجى إدخال رابط يوتيوب صحيح', false);
+                if (!title) return showToast('يرجى إدخال عنوان الفيديو', false);
+                if (!sectionTitle) return showToast('يرجى إدخال اسم القسم', false);
+                try {
+                    const res = await fetch(`${API}/kids-videos`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sectionTitle, title, videoId, icon, color }) });
+                    if (res.ok) {
+                        showToast('تمت إضافة الفيديو بنجاح ✅');
+                        ['kids-url', 'kids-vid-title', 'kids-section'].forEach(id => document.getElementById(id).value = '');
+                        document.getElementById('kids-icon').value = 'fa-star';
+                        document.getElementById('kids-preview').classList.add('hidden');
+                        loadKidsVideos();
+                    }
+                } catch (e) { showToast('فشل الاتصال بالسيرفر', false); }
+            }
+            async function deleteKidsVideo(id) {
+                if (!confirm('حذف هذا الفيديو؟')) return;
+                const res = await fetch(`${API}/kids-videos/${id}`, { method: 'DELETE' });
+                if (res.ok) { showToast('تم الحذف'); loadKidsVideos(); }
+            }
 
-        // Focus password on load
-        window.addEventListener('load', () => document.getElementById('pwd-input').focus());
-    </script>
+            // Focus password on load
+            window.addEventListener('load', () => document.getElementById('pwd-input').focus());
+        </script>
+    </div>
 </body>
 
 </html>
