@@ -613,7 +613,7 @@ class LibraryApp {
              <p class="text-muted mb-6">هذا الكتاب متوفر الآن للتحميل المجاني. نرجو أن يكون سبب بركة ومنفعة لحياتك الروحية. تم فهرسة هذا الكتاب ضمن قسم ${book.category || 'عام'}.</p>
              
              <div class="flex flex-col sm:flex-row gap-4 mt-8">
-               <button class="btn btn-primary" onclick="window.open('https://dar-al-kalima-backend.onrender.com/api/download?url=' + encodeURIComponent('${book.download_url || book.url}'), '_blank')">
+               <button class="btn btn-primary" onclick="window.open('https://dar-al-kalima-backend.onrender.com/api/download?url=' + encodeURIComponent('${(book.download_url && book.download_url.startsWith('http')) ? book.download_url : book.url}'), '_blank')">
                  <i class="fa-solid fa-download"></i> تحميل الكتاب من المنارة
                </button>
                 <button class="btn glass" style="background: rgba(33, 150, 243, 0.2); color: #2196f3; border-color: #2196f3;" onclick="app.shareBook('${book.title.replace(/'/g, "\\'")}')">
