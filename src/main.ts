@@ -38,19 +38,31 @@ class LibraryApp {
   private displayedCoursesCount: number = 24;
   private gameScore: number = 0;
   private verses = [
-    // ✝️ (1–20) آيات محبة وخلاص
-    { text: "لأَنَّهُ هكَذَا أَحَبَّ اللهُ الْعَالَمَ حَتَّى بَذَلَ ابْنَهُ الْوَحِيدَ لِكَيْ لا يَهْلِكَ كُلُّ مَنْ يُؤْمِنُ بِهِ بَلْ تَكُونُ لَهُ الْحَيَاةُ الأَبَدِيَّةُ.", reference: "يو 3:16" },
-    { text: "اللهُ مَحَبَّةٌ، وَمَنْ يَثْبُتْ فِي الْمَحَبَّةِ يَثْبُتْ فِي اللهِ وَاللهُ فِيهِ.", reference: "1يو 4:16" },
-    { text: "أَنَا هُوَ الطَّرِيقُ وَالْحَقُّ وَالْحَيَاةُ. لَيْسَ أَحَدٌ يَأْتِي إِلَى الآبِ إِلاَّ بِي.", reference: "يو 14:6" },
-    { text: "لأَنَّ ابْنَ الإِنْسَانِ قَدْ جَاءَ لِكَيْ يَطْلُبَ وَيُخَلِّصَ مَا قَدْ هَلَكَ.", reference: "لو 19:10" },
-    { text: "هذَا هُوَ الْوَصِيَّةُ أَنْ نُؤْمِنَ بِاسْمِ ابْنِهِ يَسُوعَ الْمَسِيحِ وَنُحِبَّ بَعْضُنَا بَعْضًا.", reference: "1يو 3:23" },
-    { text: "لأَنَّ اللهَ لَمْ يُرْسِلِ ابْنَهُ إِلَى الْعَالَمِ لِيَدِينَ الْعَالَمَ بَلْ لِيَخْلُصَ بِهِ الْعَالَمُ.", reference: "يو 3:17" },
-    { text: "هكَذَا أَضَاءَ نُورُكُمْ قُدَّامَ النَّاسِ لِكَيْ يَرَوْا أَعْمَالَكُمُ الْحَسَنَةَ وَيُمَجِّدُوا أَبَاكُمُ الَّذِي فِي السَّمَاوَاتِ.", reference: "مت 5:16" },
-    { text: "مَنْ يُقْبِلْ إِلَيَّ فَلاَ أُخْرِجُهُ خَارِجًا.", reference: "يو 6:37" },
-    { text: "أَمَّا الرَّبُّ فَإِنَّهُ أَمِينٌ، الَّذِي سَيُثَبِّتُكُمْ وَيَحْفَظُكُمْ مِنَ الشِّرِّيرِ.", reference: "2تس 3:3" },
-    { text: "أَنَا هُوَ الرَّاعِي الصَّالِحُ، وَالرَّاعِي الصَّالِحُ يَبْذِلُ نَفْسَهُ عَنِ الْخِرَافِ.", reference: "يو 10:11" },
+    // ✝️ آيات لتهدئة النفس والسلام
+    { text: "سَلاَمًا أَتْرُكُ لَكُمْ، سَلاَمِي أُعْطِيكُمْ", reference: "يوحنا 14:27" },
+    { text: "تَعَالَوْا إِلَيَّ يَا جَمِيعَ الْمُتْعَبِينَ وَالثَّقِيلِي الأَحْمَالِ وَأَنَا أُرِيحُكُمْ", reference: "متى 11:28" },
+    { text: "الرَّبُّ نُورِي وَخَلاَصِي، مِمَّنْ أَخَافُ؟", reference: "مزمور 27:1" },
+    { text: "أَلْقِ عَلَى الرَّبِّ هَمَّكَ فَهُوَ يَعُولُكَ", reference: "مزمور 55:22" },
+    { text: "لاَ تَخَفْ لأَنِّي مَعَكَ", reference: "إشعياء 41:10" },
+    { text: "الرَّبُّ رَاعِيَّ فَلاَ يُعْوِزُنِي شَيْءٌ", reference: "مزمور 23:1" },
+    { text: "وَسَلاَمُ اللهِ الَّذِي يَفُوقُ كُلَّ عَقْلٍ يَحْفَظُ قُلُوبَكُمْ", reference: "فيلبي 4:7" },
+    { text: "طَرِيقُ الصِّدِّيقِينَ كَنُورٍ مُشْرِقٍ", reference: "أمثال 4:18" },
+    { text: "فِي يَوْمِ خَوْفِي عَلَيْكَ تَوَكَّلْتُ", reference: "مزمور 56:3" },
+    { text: "طُوبَى لِصَانِعِي السَّلاَمِ", reference: "متى 5:9" },
 
-    // 🕊️ (21–40) آيات سلام وتشجيع
+    // 🌿 آيات للراحة والاطمئنان
+    { text: "هُوَ يَشْفِي الْمُنْكَسِرِي الْقُلُوبِ", reference: "مزمور 147:3" },
+    { text: "كُلُّ الأُمُورِ تَعْمَلُ مَعًا لِلْخَيْرِ", reference: "رومية 8:28" },
+    { text: "تَوَكَّلْ عَلَى الرَّبِّ بِكُلِّ قَلْبِكَ", reference: "أمثال 3:5" },
+    { text: "الرَّبُّ قَرِيبٌ مِنَ الْمُنْكَسِرِي الْقُلُوبِ", reference: "مزمور 34:18" },
+    { text: "لاَ تَهْتَمُّوا بِشَيْءٍ", reference: "فيلبي 4:6" },
+    { text: "لأَنَّ اللهَ لَمْ يُعْطِنَا رُوحَ الْفَشَلِ", reference: "2 تيموثاوس 1:7" },
+    { text: "الرَّبُّ يُعْطِي قُوَّةً لِشَعْبِهِ", reference: "مزمور 29:11" },
+    { text: "كُونُوا سَاكِنِينَ وَاعْلَمُوا أَنِّي أَنَا اللهُ", reference: "مزمور 46:10" },
+    { text: "مَعَ اللهِ نَصْنَعُ بِأْسًا", reference: "مزمور 60:12" },
+    { text: "فَلاَ نَفْشَلُ لأَنَّ بَاطِنَنَا يَتَجَدَّدُ يَوْمًا فَيَوْمًا", reference: "2 كورنثوس 4:16" },
+
+    // Existing verses below...
     { text: "لاَ تَخَفْ لأَنِّي مَعَكَ. لاَ تَتَلَفَّتْ لأَنِّي إِلَهُكَ. قَدْ أَيَّدْتُكَ وَأَعَنْتُكَ.", reference: "إش 41:10" },
     { text: "الرَّبُّ رَاعِيَّ فَلاَ يُعْوِزُنِي شَيْءٌ. فِي مَرَاعٍ خُضْرٍ يُرْبِضُنِي.", reference: "مز 23:1–2" },
     { text: "سَلاَمًا أَتْرُكُ لَكُمْ. سَلاَمِي أُعْطِيكُمْ. لاَ تَضْطَرِبْ قُلُوبُكُمْ.", reference: "يو 14:27" },
@@ -199,7 +211,36 @@ class LibraryApp {
     this.gridContainer = document.getElementById('book-grid');
     this.contentContainer = document.getElementById('content-container');
 
-    this.contentContainer = document.getElementById('content-container');
+    // Preloader Verse Rotation
+    let verseIndex = 0;
+    const lvt = document.getElementById('loader-verse-text');
+    const lvr = document.getElementById('loader-verse-ref');
+    const card = document.querySelector('.premium-loader-card') as HTMLElement;
+
+    const updateLoaderVerse = () => {
+      if (lvt && lvr && card) {
+        // Transition out
+        lvt.style.opacity = '0';
+        lvt.style.transform = 'translateY(-10px)';
+        lvr.style.opacity = '0';
+
+        setTimeout(() => {
+          const v = this.verses[verseIndex];
+          lvt.innerText = `"${v.text}"`;
+          lvr.innerText = v.reference;
+
+          // Transition in
+          lvt.style.opacity = '1';
+          lvt.style.transform = 'translateY(0)';
+          lvr.style.opacity = '1';
+
+          verseIndex = (verseIndex + 1) % this.verses.length; // Rotate through all verses
+        }, 600);
+      }
+    };
+
+    updateLoaderVerse();
+    const verseInterval = setInterval(updateLoaderVerse, 2500); // 2.5s for better reading time
     const API_BASE = 'https://dar-al-kalima-backend.onrender.com/api';
 
     try {
@@ -243,6 +284,18 @@ class LibraryApp {
     this.setupRoutes();
     this.setupSearch();
     this.renderHome();
+
+    // Hide Orthodox Loader
+    setTimeout(() => {
+      const loader = document.getElementById('site-loader');
+      if (loader) {
+        clearInterval(verseInterval);
+        loader.style.opacity = '0';
+        setTimeout(() => {
+          loader.style.visibility = 'hidden';
+        }, 1000);
+      }
+    }, 5000); // 5s delay to show cards
   }
 
   updateStats() {
@@ -337,28 +390,32 @@ class LibraryApp {
     const latestCourses = this.courses.slice(0, 4);
 
     this.contentContainer.innerHTML = `
-      <div class="hero glass fade-in mb-12">
+      <div class="hero glass fade-in mb-12" style="border-bottom: 3px solid var(--accent-gold);">
         <div class="hero-content">
-           <span class="badge" style="background: rgba(33, 150, 243, 0.1); color: #2196f3;">مرحباً بك في دار الكلمة</span>
-           <h1>اكتشف كنوز الحكمة والروحانية</h1>
-           <p class="text-muted mb-8">منصتكم الشاملة للكتب المسيحية، الكورسات التعليمية، وفيديوهات الكنيسة والبودكاست. كل ما تحتاجه للنمو الروحي والمعرفي في مكان واحد.</p>
+           <div class="flex items-center gap-2 mb-4">
+             <i class="fa-solid fa-cross spiritual-cross"></i>
+             <span class="badge" style="background: rgba(212, 175, 55, 0.1); color: var(--accent-gold); border: 1px solid rgba(212, 175, 55, 0.2);">مكتبة دار الكلمة الأرثوذكسية</span>
+           </div>
+           <h1>اكتشف كنوز الحكمة والروحانية الأرثوذكسية</h1>
+           <p class="text-muted mb-8">أكبر تجمع للكتب المسيحية العربية، ابائيات، لاهوت، وتفاسير الكتاب المقدس متاحة للتحميل مجاناً بضغطة زر واحدة.</p>
            <div class="flex flex-wrap gap-4">
-             <button class="btn btn-primary" onclick="app.navigate('books')">تصفح الكتب</button>
-             <button class="btn glass" onclick="app.navigate('courses')">الكورسات</button>
+             <button class="btn btn-primary" style="background: var(--gradient-orthodox); border: none;" onclick="app.navigate('books')">ابدأ القراءة</button>
+             <button class="btn glass" onclick="app.navigate('courses')"><i class="fa-solid fa-play"></i> الكورسات</button>
              <button class="btn glass" style="background: rgba(255, 193, 7, 0.1); border-color: #ffc107; color: #ffc107;" onclick="app.navigate('kids')">ركن الأطفال 🎈</button>
            </div>
         </div>
         <div class="hero-img">
+           <div class="decoration-shape shape-coptic-cross" style="top: -50px; right: -50px;"></div>
            <i class="fa-solid fa-book-open-reader fa-10x opacity-10"></i>
         </div>
       </div>
 
       <!-- Books Highlights -->
       <div class="section-header">
-        <div class="section-title">
-          <i class="fa-solid fa-star text-primary"></i>
-          <h2>أحدث الكتب المضافة</h2>
-        </div>
+      <div class="section-title">
+        <i class="fa-solid fa-cross spiritual-cross"></i>
+        <h2>أحدث الكتب المضافة</h2>
+      </div>
         <a href="#" onclick="app.navigate('books')" class="view-all">عرض الكل <i class="fa-solid fa-arrow-left"></i></a>
       </div>
       <div class="book-grid mb-12">
@@ -485,6 +542,7 @@ class LibraryApp {
           </div>
         </div>
       </div>
+      ${this.getVersesHTML()}
     `;
   }
 
@@ -509,7 +567,7 @@ class LibraryApp {
     this.contentContainer!.innerHTML = `
       <div class="section-header">
         <div class="section-title">
-          <i class="fa-solid fa-book"></i>
+          <i class="fa-solid fa-cross spiritual-cross"></i>
           <h2>${this.currentCategory || 'تصفح الكتب'} (${booksToDisplay.length})</h2>
         </div>
         ${this.currentCategory ? `<button class="btn glass btn-sm" style="background: rgba(33, 150, 243, 0.2); color: #2196f3; border-color: #2196f3;" onclick="app.filterByCategory(null)">إلغاء التصفية <i class="fa-solid fa-xmark"></i></button>` : ''}
@@ -557,7 +615,7 @@ class LibraryApp {
     this.contentContainer!.innerHTML = `
       <div class="section-header">
         <div class="section-title">
-          <i class="fa-solid fa-graduation-cap"></i>
+          <i class="fa-solid fa-cross spiritual-cross"></i>
           <h2>${this.currentCategory || 'جميع الكورسات'} (${coursesToDisplay.length})</h2>
         </div>
         ${this.currentCategory ? `<button class="btn glass btn-sm" style="background: rgba(33, 150, 243, 0.2); color: #2196f3; border-color: #2196f3;" onclick="app.filterByCategory(null)">عرض الكل <i class="fa-solid fa-xmark"></i></button>` : ''}
@@ -921,7 +979,7 @@ class LibraryApp {
     const dbCollectionsHTML = Object.entries(dbByCollection).map(([colName, videos]) => `
       <div class="section-header mt-12">
         <div class="section-title">
-          <i class="fa-solid fa-star text-primary"></i>
+          <i class="fa-solid fa-cross spiritual-cross"></i>
           <h2>${colName}</h2>
         </div>
         <span class="badge" style="background:rgba(16,185,129,0.15);color:#34d399;border:1px solid #34d399;font-size:0.75rem">مضاف من الأدمن</span>
@@ -1277,7 +1335,10 @@ class LibraryApp {
     this.contentContainer.innerHTML = `
       <div class="fade-in">
         <div class="section-header mb-8">
-          <h2><i class="fa-solid fa-microphone"></i> بودكاست</h2>
+          <div class="section-title">
+            <i class="fa-solid fa-cross spiritual-cross"></i>
+            <h2>بودكاست</h2>
+          </div>
           <p class="text-muted mt-2">استمع لأحدث الحلقات الروحية والفكرية</p>
         </div>
         ${dbSeriesHTML}
@@ -1639,6 +1700,28 @@ class LibraryApp {
         <h2>عن المنارة التعليمية</h2>
         <p class="mt-4">هذا الموقع هو محرك منسق يهدف لتسهيل الوصول للمحتوى المسيحي العربي والكتب المجانية، بالإضافة إلى الدورات المعتمدة.</p>
         <p class="mt-2 text-muted">تم استخراج البيانات من مصادر مفتوحة وتصنيفها برمجياً لخدمتكم.</p>
+      </div>
+    `;
+  }
+
+  getVersesHTML() {
+    return `
+      <div class="verses-container mb-12 fade-in">
+        <div class="section-header">
+          <div class="section-title">
+            <i class="fa-solid fa-cross spiritual-cross"></i>
+            <h2>آيات للحياة</h2>
+          </div>
+        </div>
+        <div class="verses-scroll-wrapper">
+          ${this.verses.map(v => `
+            <div class="verse-card-premium">
+              <i class="fa-solid fa-quote-right fa-2xl opacity-20"></i>
+              <div class="verse-card-content">${v.text.replace(/'/g, "&apos;")}</div>
+              <div class="verse-card-reference">${v.reference.replace(/'/g, "&apos;")}</div>
+            </div>
+          `).join('')}
+        </div>
       </div>
     `;
   }

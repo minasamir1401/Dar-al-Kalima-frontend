@@ -122,6 +122,31 @@
 </head>
 
 <body>
+  <!-- Spiritual Background Pattern -->
+  <div class="spiritual-bg-pattern"></div>
+
+  <!-- Orthodox Site Loader -->
+  <div id="site-loader">
+    <div class="loader-rays"></div>
+    <div class="loader-cross-wrapper">
+      <div class="loader-halo"></div>
+      <svg class="coptic-loader-icon" viewBox="0 0 100 100">
+        <!-- Coptic Cross SVG path -->
+        <path d="M50 5 L50 95 M5 50 L95 50 M35 20 L65 20 M35 80 L65 80 M20 35 L20 65 M80 35 L80 65"
+          stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="50" cy="50" r="10" fill="none" stroke="var(--accent-gold)" />
+      </svg>
+    </div>
+    <div class="loader-verse-container">
+      <div class="premium-loader-card card-anim-in">
+        <div id="loader-verse-text" class="loader-verse-text">"سَلاَمًا أَتْرُكُ لَكُمْ، سَلاَمِي أُعْطِيكُمْ"</div>
+        <div id="loader-verse-ref" class="loader-verse-ref">يوحنا ١٤:٢٧</div>
+      </div>
+    </div>
+    <div class="loader-text" style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">بِاسْمِ الآبِ وَالابْنِ
+      وَالرُّوحِ القُدُسِ</div>
+  </div>
+
   <div class="bg-blobs">
     <div class="blob" style="top: -10%; left: -10%;"></div>
     <div class="blob" style="bottom: 0%; right: 0%; opacity: 0.1;"></div>
@@ -145,14 +170,14 @@
           <ul role="list">
             <li><a href="#home" class="active" data-page="home" aria-label="الصفحة الرئيسية"><i
                   class="fa-solid fa-house" aria-hidden="true"></i> الرئيسية</a></li>
-            <li><a href="#books" data-page="books" aria-label="تصفح جميع الكتب المسيحية"><i class="fa-solid fa-book"
-                  aria-hidden="true"></i> جميع الكتب</a></li>
+            <li><a href="#books" data-page="books" aria-label="تصفح جميع الكتب المسيحية"><i
+                  class="fa-solid fa-cross spiritual-cross" aria-hidden="true"></i> جميع الكتب</a></li>
             <li><a href="#courses" data-page="courses" aria-label="الدورات والتعليم"><i
                   class="fa-solid fa-graduation-cap" aria-hidden="true"></i> الدورات والتعليم</a></li>
             <li><a href="#church-videos" data-page="church-videos" aria-label="فيديوهات كنيستي"><i
-                  class="fa-solid fa-clapperboard" aria-hidden="true"></i> فيديوهات كنيستي</a></li>
-            <li><a href="#podcast" data-page="podcast" aria-label="البودكاست الروحي"><i class="fa-solid fa-microphone"
-                  aria-hidden="true"></i> بودكاست</a></li>
+                  class="fa-solid fa-dove spiritual-cross" aria-hidden="true"></i> فيديوهات كنيستي</a></li>
+            <li><a href="#podcast" data-page="podcast" aria-label="البودكاست الروحي"><i
+                  class="fa-solid fa-microphone-lines spiritual-cross" aria-hidden="true"></i> بودكاست</a></li>
             <li><a href="#kids" data-page="kids" aria-label="ركن الأطفال"><i class="fa-solid fa-child"
                   aria-hidden="true"></i> ركن الأطفال</a></li>
           </ul>
@@ -178,6 +203,15 @@
         </div>
       </section>
     </main>
+
+    <footer class="glass mt-12 p-8 text-center"
+      style="border-radius: 32px 32px 0 0; border-top: 1px solid var(--accent-gold);">
+      <div class="flex flex-col items-center gap-4">
+        <i class="fa-solid fa-cross spiritual-cross" style="font-size: 2rem;"></i>
+        <p class="text-muted italic">"الرَّبُّ نُورِي وَخَلاَصِي، مِمَّنْ أَخَافُ؟"</p>
+        <p class="text-xs text-muted mt-4">© 2026 دار الكلمة - جميع الحقوق محفوظة لخدمة الكلمة</p>
+      </div>
+    </footer>
   </div>
 
   <style>

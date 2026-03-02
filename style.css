@@ -4,6 +4,8 @@
     --primary: #3b82f6;
     --primary-glow: rgba(59, 130, 246, 0.5);
     --secondary: #fbbf24;
+    --accent-gold: #d4af37;
+    --accent-red: #b22222;
     --bg-dark: #070b14;
     --bg-card: rgba(255, 255, 255, 0.03);
     --glass-bg: rgba(255, 255, 255, 0.05);
@@ -11,6 +13,7 @@
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
     --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --gradient-orthodox: linear-gradient(135deg, #d4af37 0%, #b22222 100%);
     --shadow-lg: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
@@ -64,6 +67,243 @@ body {
     66% {
         transform: translate(-50px, 200px) scale(0.9);
     }
+}
+
+@keyframes spin-coptic {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse-halo {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.6;
+    }
+}
+
+@keyframes draw-cross {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* ===================== PRELOADER ===================== */
+#site-loader {
+    position: fixed;
+    inset: 0;
+    background: #070b14;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+.loader-cross-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.coptic-loader-icon {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--accent-gold);
+    stroke-width: 2;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw-cross 3s ease-in-out forwards;
+}
+
+.loader-halo {
+    position: absolute;
+    inset: -20px;
+    border: 2px solid var(--accent-gold);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: pulse-halo 2s infinite ease-in-out, spin-coptic 10s linear infinite;
+    border-style: double;
+}
+
+/* Light Rays Animation */
+@keyframes rays {
+    0% {
+        transform: rotate(0deg);
+        opacity: 0.1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        opacity: 0.1;
+    }
+}
+
+.loader-rays {
+    position: absolute;
+    inset: -100px;
+    background: conic-gradient(from 0deg, transparent, var(--accent-gold), transparent, var(--accent-gold), transparent);
+    opacity: 0.1;
+    mask-image: radial-gradient(circle, black, transparent 70%);
+    -webkit-mask-image: radial-gradient(circle, black, transparent 70%);
+    animation: rays 10s linear infinite;
+}
+
+.loader-verse-container {
+    margin-top: 3rem;
+    width: 90%;
+    max-width: 500px;
+    perspective: 1000px;
+    z-index: 10;
+}
+
+.premium-loader-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-top: 4px solid var(--accent-gold);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.1);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.premium-loader-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(212, 175, 55, 0.15), transparent 70%);
+    pointer-events: none;
+}
+
+.loader-verse-text {
+    font-size: 1.4rem;
+    color: var(--text-main);
+    font-weight: 500;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: 0.5s opacity, 0.5s transform;
+    text-align: center;
+}
+
+.loader-verse-ref {
+    color: var(--accent-gold);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.loader-verse-ref::before,
+.loader-verse-ref::after {
+    content: "";
+    height: 1px;
+    width: 30px;
+    background: var(--accent-gold);
+    opacity: 0.5;
+}
+
+@keyframes cardEntry {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) rotateX(-10deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+.card-anim-in {
+    animation: cardEntry 0.8s forwards;
+}
+
+.logo-img {
+    height: 45px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    transition: 0.3s;
+}
+
+.logo-container:hover .logo-img {
+    box-shadow: 0 0 25px var(--accent-gold);
+    transform: scale(1.05);
+}
+
+.loader-text {
+    margin-top: 2rem;
+    font-family: 'Tajawal', sans-serif;
+    color: var(--accent-gold);
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+    animation: float 3s infinite ease-in-out;
+}
+
+@keyframes spiritual-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+    }
+}
+
+.spiritual-card-glow {
+    animation: spiritual-glow 4s infinite ease-in-out;
+}
+
+.floating-cross-bg {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 3rem;
+    color: var(--accent-gold);
+    opacity: 0.05;
+    pointer-events: none;
+    animation: float 6s infinite ease-in-out;
+}
+
+.spiritual-bg-pattern {
+    position: fixed;
+    inset: 0;
+    /* Detailed Coptic Cross Pattern */
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10 L50 90 M10 50 L90 50' stroke='%23d4af37' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3Ccircle cx='50' cy='50' r='5' stroke='%23d4af37' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3Cpath d='M35 25 L65 25 M35 75 L65 75 M25 35 L25 65 M75 35 L75 65' stroke='%23d4af37' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: -1;
+    mask-image: radial-gradient(circle, black, transparent 90%);
+    -webkit-mask-image: radial-gradient(circle, black, transparent 90%);
 }
 
 /* Glassmorphism */
@@ -165,8 +405,101 @@ nav a.active,
 
 nav a.active,
 .cat-link.active {
-    background: rgba(59, 130, 246, 0.15);
-    border-bottom: 3px solid var(--primary);
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--accent-gold);
+    border-bottom: 3px solid var(--accent-gold);
+}
+
+/* Orthodox Decorations */
+.spiritual-cross {
+    font-size: 1.5rem;
+    color: var(--accent-gold);
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3));
+    margin: 0 10px;
+    animation: pulse-halo 3s infinite ease-in-out;
+}
+
+.decoration-shape {
+    position: absolute;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(1px);
+}
+
+.shape-coptic-cross {
+    width: 200px;
+    height: 200px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' stroke='%23d4af37' stroke-width='2' fill='none'%3E%3Cpath d='M50 5 L50 95 M5 50 L95 50 M35 20 L65 20 M35 80 L65 80 M20 35 L20 65 M80 35 L80 65'/%3E%3Ccircle cx='50' cy='50' r='10'/%3E%3C/svg%3E") no-repeat center;
+}
+
+/* Verses Section Premium Styles */
+.verses-container {
+    padding: 4rem 2rem;
+    background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.05), transparent);
+    position: relative;
+    overflow: hidden;
+}
+
+.verses-scroll-wrapper {
+    display: flex;
+    overflow-x: auto;
+    gap: 2rem;
+    padding: 2rem 1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.verses-scroll-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.verse-card-premium {
+    min-width: 350px;
+    max-width: 350px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-top: 4px solid var(--accent-gold);
+}
+
+.verse-card-premium:hover {
+    transform: translateY(-15px) scale(1.02);
+    border-color: var(--accent-gold);
+    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+    background: rgba(212, 175, 55, 0.03);
+}
+
+.verse-card-premium i {
+    position: absolute;
+    top: -15px;
+    right: 2rem;
+    background: var(--bg-dark);
+    padding: 5px;
+    color: var(--accent-gold);
+}
+
+.verse-card-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-main);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.verse-card-reference {
+    color: var(--accent-gold);
+    font-weight: 700;
+    text-align: left;
+    font-size: 0.9rem;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 1rem;
 }
 
 #category-list {
@@ -368,6 +701,23 @@ main {
     background: rgba(255, 255, 255, 0.02);
     border-radius: 20px;
     margin-bottom: 1.5rem;
+    transition: 0.3s;
+}
+
+.book-card::after {
+    content: "✝";
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    font-size: 1.2rem;
+    color: var(--accent-gold);
+    opacity: 0.3;
+    transition: 0.3s;
+}
+
+.book-card:hover::after {
+    opacity: 1;
+    text-shadow: 0 0 10px var(--accent-gold);
 }
 
 .book-title {
