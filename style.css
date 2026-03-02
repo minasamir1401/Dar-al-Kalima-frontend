@@ -416,6 +416,19 @@ main {
     filter: brightness(1.1);
 }
 
+.load-more-btn {
+    background: var(--gradient-primary) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+    margin: 2rem auto;
+}
+
+.load-more-btn:hover {
+    box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.6);
+    filter: brightness(1.1);
+    transform: translateY(-3px);
+}
+
 .btn-sm {
     padding: 0.6rem 1rem;
     font-size: 0.9rem;
