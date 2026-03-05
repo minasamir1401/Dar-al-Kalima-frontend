@@ -30,3 +30,16 @@ export interface KidsSection {
     color: string;
     videos: { title: string, id: string }[];
 }
+
+export interface Subject {
+    id: number;
+    title: string;
+    grade: string;
+    image: string;
+    download_url: string;
+    video_id: string;
+    category: string;
+    subject_name?: string;
+    source_url?: string;
+    lessons_data?: { title: string, url: string, videoId: string | null, downloadUrl: string | null }[] | null;
+}

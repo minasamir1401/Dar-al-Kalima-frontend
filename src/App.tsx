@@ -11,6 +11,8 @@ import ChurchVideoPlayer from './pages/ChurchVideoPlayer'
 import Podcast from './pages/Podcast'
 import PodcastPlayer from './pages/PodcastPlayer'
 import Kids from './pages/Kids'
+import Subjects from './pages/Subjects'
+import LessonPage from './pages/LessonPage'
 import Admin from './pages/Admin'
 import Loader from './components/Loader'
 
@@ -41,6 +43,8 @@ const App: React.FC = () => {
                     <Route path="/podcast" element={<Podcast />} />
                     <Route path="/podcast/:id" element={<PodcastPlayer />} />
                     <Route path="/kids" element={<Kids />} />
+                    <Route path="/subjects" element={<Subjects />} />
+                    <Route path="/lesson/:id" element={<LessonPage />} />
                     <Route path="/admin" element={<Admin />} />
                 </Routes>
             </Layout>
@@ -113,6 +117,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             <li>
                                 <Link to="/kids" className={location.pathname === '/kids' ? 'active' : ''} onClick={() => setIsMenuOpen(false)}>
                                     <i className="fa-solid fa-child"></i> ركن الأطفال
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/subjects" className={location.pathname === '/subjects' ? 'active' : ''} onClick={() => setIsMenuOpen(false)}>
+                                    <i className="fa-solid fa-book-open-reader"></i> المواد الدراسية
                                 </Link>
                             </li>
 
