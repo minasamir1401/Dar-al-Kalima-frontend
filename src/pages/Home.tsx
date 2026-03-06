@@ -68,8 +68,8 @@ const Home: React.FC = () => {
                         <Link to="/books" className="btn btn-primary px-10 py-4 shadow-2xl scale-110 hover:scale-115 transition-transform">
                             <i className="fa-solid fa-book-open ml-2"></i> تصفح المكتبة
                         </Link>
-                        <Link to="/kids" className="btn glass px-10 py-4 !bg-white/5 hover:!bg-white/10 border-white/10">
-                            <i className="fa-solid fa-child ml-2 text-accent-gold"></i> ركن الأطفال 🎈
+                        <Link to="/subjects" className="btn glass px-10 py-4 !bg-white/5 hover:!bg-white/10 border-white/10">
+                            <i className="fa-solid fa-book-open-reader ml-2 text-accent-gold"></i> الدروس المدرسية 📚
                         </Link>
                     </div>
                 </div>
@@ -77,10 +77,10 @@ const Home: React.FC = () => {
 
             {/* Redesigned Quick Access Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-                <QuickLink to="/courses" icon="fa-graduation-cap" title="الكورسات" subtitle="تعلم ونمو" color="#3b82f6" />
-                <QuickLink to="/church-videos" icon="fa-clapperboard" title="الميديا" subtitle="شاهد وتأمل" color="#ef4444" />
-                <QuickLink to="/podcast" icon="fa-microphone-lines" title="بودكاست" subtitle="استمع وتغير" color="#f59e0b" />
-                <QuickLink to="/kids" icon="fa-gamepad" title="الألعاب" subtitle="العب وامرح" color="#10b981" />
+                <QuickLink to="/courses" icon="fa-graduation-cap" title="الكورسات" subtitle="تعلم ونمو" />
+                <QuickLink to="/church-videos" icon="fa-clapperboard" title="الميديا" subtitle="شاهد وتأمل" />
+                <QuickLink to="/podcast" icon="fa-microphone-lines" title="بودكاست" subtitle="استمع وتغير" />
+                <QuickLink to="/subjects" icon="fa-book-open-reader" title="المواد الدراسية" subtitle="مناهج تعليمية" />
             </div>
 
             <SectionDivider />
@@ -122,12 +122,12 @@ const Home: React.FC = () => {
     )
 }
 
-const QuickLink: React.FC<{ to: string, icon: string, title: string, subtitle: string, color: string }> = ({ to, icon, title, subtitle, color }) => (
-    <Link to={to} className="premium-card !p-4 flex items-center gap-4 hover:scale-[1.05] transition-all group overflow-hidden relative" style={{ borderColor: color + '22' }}>
+const QuickLink: React.FC<{ to: string, icon: string, title: string, subtitle: string }> = ({ to, icon, title, subtitle }) => (
+    <Link to={to} className="premium-card !p-4 flex items-center gap-4 hover:scale-[1.05] transition-all group overflow-hidden relative" style={{ borderColor: 'var(--glass-border)' }}>
         <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <i className={`fa-solid ${icon} text-6xl`}></i>
         </div>
-        <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-xl shrink-0 group-hover:rotate-6 transition-transform" style={{ backgroundColor: color }}>
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg shrink-0 group-hover:rotate-6 transition-transform" style={{ backgroundColor: 'var(--primary)', color: '#fff' }}>
             <i className={`fa-solid ${icon} text-xl`}></i>
         </div>
         <div className="flex flex-col">
@@ -140,7 +140,7 @@ const QuickLink: React.FC<{ to: string, icon: string, title: string, subtitle: s
 const SectionHeader: React.FC<{ title: string, to: string }> = ({ title, to }) => (
     <div className="flex justify-between items-center mb-6 px-1">
         <h2 className="text-xl font-bold border-r-4 border-primary pr-3">{title}</h2>
-        <Link to={to} className="text-xs text-primary font-bold hover:underline">عرض الكل <i className="fa-solid fa-arrow-left mr-1"></i></Link>
+        <Link to={to} className="text-xs text-primary font-bold">عرض الكل <i className="fa-solid fa-arrow-left mr-1"></i></Link>
     </div>
 )
 

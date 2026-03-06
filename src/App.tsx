@@ -73,10 +73,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
             <header className="glass top-nav fade-in" role="banner">
                 <div className="nav-content">
-                    <div className="logo-container">
+                    <Link to="/" className="logo-container cursor-pointer hover:opacity-80 transition-opacity">
                         <img src="/logo.png" alt="شعار دار الكلمة - Dar Al-Kalima" className="logo-img" style={{ height: '45px', width: 'auto', borderRadius: '8px' }} />
                         <span className="logo-text">دار الكلمة | Dar Al-Kalima</span>
-                    </div>
+                    </Link>
 
                     <button
                         id="menu-toggle"
@@ -112,11 +112,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             <li>
                                 <Link to="/courses" className={location.pathname === '/courses' ? 'active' : ''} onClick={() => setIsMenuOpen(false)}>
                                     <i className="fa-solid fa-graduation-cap"></i> الكورسات
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/kids" className={location.pathname === '/kids' ? 'active' : ''} onClick={() => setIsMenuOpen(false)}>
-                                    <i className="fa-solid fa-child"></i> ركن الأطفال
                                 </Link>
                             </li>
                             <li>
