@@ -603,52 +603,68 @@ main {
 }
 
 .search-box {
-    flex: 1;
-    max-width: 600px;
     position: relative;
+    width: 100%;
 }
 
-.search-box input {
+.search-box input,
+input.search-box {
     width: 100%;
-    background: rgba(59, 130, 246, 0.05);
-    border: 1px solid rgba(59, 130, 246, 0.15);
-    padding: 0.8rem 3rem 0.8rem 1.4rem;
-    border-radius: 100px;
+    background: rgba(59, 130, 246, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 1rem 1.5rem !important;
+    border-radius: 16px !important;
     color: #fff;
     outline: none;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 500;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.02) !important;
+    backdrop-filter: blur(10px);
+}
+
+div.search-box input {
+    padding-right: 3rem !important;
 }
 
 @media (max-width: 768px) {
-    .search-box input {
-        padding: 0.6rem 2.8rem 0.6rem 1rem;
-        font-size: 0.85rem;
+
+    .search-box input,
+    input.search-box {
+        padding: 0.8rem 1.2rem !important;
+        font-size: 0.9rem;
     }
 
-    .search-box i {
+    div.search-box input {
+        padding-right: 2.8rem !important;
+    }
+
+    div.search-box i {
         right: 1.2rem !important;
     }
 }
 
-.search-box input:focus {
-    border-color: var(--primary);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.05);
-    transform: translateY(-1px);
+.search-box input:focus,
+input.search-box:focus {
+    border-color: var(--primary) !important;
+    background: rgba(59, 130, 246, 0.1) !important;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-2px);
 }
 
-.search-box i {
+div.search-box i {
     position: absolute;
-    right: 1.5rem;
+    right: 1.2rem;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-muted);
     transition: 0.3s;
+    font-size: 1.1rem;
+    pointer-events: none;
 }
 
-.search-box input:focus+i {
+div.search-box input:focus~i,
+div.search-box input:focus+i {
     color: var(--primary);
 }
 

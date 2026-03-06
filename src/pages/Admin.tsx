@@ -99,7 +99,7 @@ const Admin: React.FC = () => {
                                     </span>
                                     <input
                                         type="password"
-                                        className="search-box w-full text-center tracking-[0.5em] text-xl !pr-10 !pl-10 !bg-primary/5 focus:!bg-white/10 transition-all placeholder:tracking-normal placeholder:text-sm"
+                                        className="search-box w-full text-center tracking-[0.5em] text-xl !pr-10 !pl-10 focus:!bg-white/10 transition-all placeholder:tracking-normal placeholder:text-sm"
                                         placeholder="••••••••"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
@@ -160,7 +160,7 @@ const Admin: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <button onClick={() => setMobileSidebarOpen(true)} className="btn glass !p-2.5 !rounded-xl">
+                <button onClick={() => setMobileSidebarOpen(true)} className="btn !p-2.5 !rounded-xl bg-primary/20 text-primary border border-primary/20 hover:bg-primary/30 transition-all">
                     <i className="fa-solid fa-bars text-lg"></i>
                 </button>
             </div>
@@ -318,7 +318,7 @@ const AdminDashboard: React.FC<{ stats: any, loading: boolean }> = ({ stats, loa
             <div className="flex items-center gap-4 flex-1 max-w-md">
                 <div className="search-box w-full">
                     <i className="fa-solid fa-magnifying-glass"></i>
-                    <input placeholder="بحث في الاحصائيات والبيانات..." className="search-box w-full !bg-primary/5 !pr-10" />
+                    <input placeholder="بحث في الاحصائيات والبيانات..." className="search-box" />
                 </div>
                 <div className="hidden md:flex gap-4 shrink-0">
                     <div className="bg-primary/10 border border-primary/20 px-4 py-2 rounded-2xl flex items-center gap-2">
@@ -401,23 +401,23 @@ const AdminBooksManager: React.FC<{ books: any[], refresh: () => void }> = ({ bo
                 <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
                         <label className="text-xs font-bold text-muted px-2 uppercase tracking-wider">عنوان الكتاب</label>
-                        <input className="search-box w-full !pr-4 !bg-primary/5" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                        <input className="search-box" value={title} onChange={(e) => setTitle(e.target.value)} required />
                     </div>
                     <div className="space-y-2">
                         <label className="text-xs font-bold text-muted px-2 uppercase tracking-wider">التصنيف</label>
-                        <input className="search-box w-full !pr-4 !bg-primary/5" value={category} onChange={(e) => setCategory(e.target.value)} />
+                        <input className="search-box" value={category} onChange={(e) => setCategory(e.target.value)} />
                     </div>
                     <div className="space-y-2">
                         <label className="text-xs font-bold text-muted px-2 uppercase tracking-wider">رابط الصورة</label>
-                        <input className="search-box w-full !pr-4 !bg-primary/5" value={image} onChange={(e) => setImage(e.target.value)} />
+                        <input className="search-box" value={image} onChange={(e) => setImage(e.target.value)} />
                     </div>
                     <div className="space-y-2">
                         <label className="text-xs font-bold text-muted px-2 uppercase tracking-wider">رابط المعاينة</label>
-                        <input className="search-box w-full !pr-4 !bg-primary/5" value={url} onChange={(e) => setUrl(e.target.value)} />
+                        <input className="search-box" value={url} onChange={(e) => setUrl(e.target.value)} />
                     </div>
                     <div className="space-y-2 md:col-span-2">
                         <label className="text-xs font-bold text-muted px-2 uppercase tracking-wider">رابط التحميل المباشر</label>
-                        <input className="search-box w-full !pr-4 !bg-primary/5" value={downloadUrl} onChange={(e) => setDownloadUrl(e.target.value)} />
+                        <input className="search-box" value={downloadUrl} onChange={(e) => setDownloadUrl(e.target.value)} />
                     </div>
                     <button type="submit" className="btn btn-primary lg:w-max px-12 py-4 shadow-primary/30">حفظ الكتاب</button>
                 </form>
@@ -493,10 +493,10 @@ const AdminCoursesManager: React.FC<{ courses: any[], refresh: () => void }> = (
             <div className="form-group-premium">
                 <h2 className="text-2xl font-bold mb-8">إضافة كورس تعليمي</h2>
                 <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input placeholder="اسم الكورس" className="search-box w-full !bg-primary/5 !pr-4" value={title} onChange={e => setTitle(e.target.value)} required />
-                    <input placeholder="المدرب" className="search-box w-full !bg-primary/5 !pr-4" value={instructor} onChange={e => setInstructor(e.target.value)} />
-                    <input placeholder="عدد الدروس" className="search-box w-full !bg-primary/5 !pr-4" value={lessons} onChange={e => setLessons(e.target.value)} />
-                    <input placeholder="التصنيف" className="search-box w-full !bg-primary/5 !pr-4" value={category} onChange={e => setCategory(e.target.value)} />
+                    <input placeholder="اسم الكورس" className="search-box" value={title} onChange={e => setTitle(e.target.value)} required />
+                    <input placeholder="المدرب" className="search-box" value={instructor} onChange={e => setInstructor(e.target.value)} />
+                    <input placeholder="عدد الدروس" className="search-box" value={lessons} onChange={e => setLessons(e.target.value)} />
+                    <input placeholder="التصنيف" className="search-box" value={category} onChange={e => setCategory(e.target.value)} />
                     <input placeholder="رابط الصورة" className="search-box w-full !bg-primary/5 !pr-4 md:col-span-2" value={image} onChange={e => setImage(e.target.value)} />
                     <input placeholder="رابط الكورس (Video ID / URL)" className="search-box w-full !bg-primary/5 !pr-4 md:col-span-2" value={url} onChange={e => setUrl(e.target.value)} />
                     <button type="submit" className="btn btn-primary lg:w-max px-12 py-4">حفظ الكورس</button>
@@ -567,7 +567,7 @@ const AdminMediaManager: React.FC<{ videos: any[], refresh: () => void }> = ({ v
                         <div className="space-y-5">
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">عنوان الفيديو</label>
-                                <input placeholder="أدخل عنوان الفيديو..." className="search-box w-full !bg-primary/5 !pr-4" value={title} onChange={e => setTitle(e.target.value)} required />
+                                <input placeholder="أدخل عنوان الفيديو..." className="search-box" value={title} onChange={e => setTitle(e.target.value)} required />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">رابط YouTube</label>
@@ -575,7 +575,7 @@ const AdminMediaManager: React.FC<{ videos: any[], refresh: () => void }> = ({ v
                                     <i className="fa-brands fa-youtube yt-icon text-red-500"></i>
                                     <input
                                         placeholder="https://youtube.com/watch?v=..."
-                                        className="search-box w-full !bg-primary/5"
+                                        className="search-box"
                                         value={youtubeUrl}
                                         onChange={e => setYoutubeUrl(e.target.value)}
                                         required
@@ -586,7 +586,7 @@ const AdminMediaManager: React.FC<{ videos: any[], refresh: () => void }> = ({ v
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">المجموعة / التصنيف</label>
-                                <input placeholder="مثال: عظات، لاهوت، ترانيم" className="search-box w-full !bg-primary/5 !pr-4" value={collection} onChange={e => setCollection(e.target.value)} />
+                                <input placeholder="مثال: عظات، لاهوت، ترانيم" className="search-box" value={collection} onChange={e => setCollection(e.target.value)} />
                             </div>
                             <button type="submit" className="btn btn-primary w-full py-4 text-base font-bold shadow-lg shadow-primary/20">
                                 <i className="fa-solid fa-cloud-arrow-up"></i> حفظ الفيديو
@@ -673,7 +673,7 @@ const AdminPodcastManager: React.FC<{ podcasts: any[], refresh: () => void }> = 
                         <div className="space-y-5">
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">عنوان الحلقة</label>
-                                <input placeholder="أدخل عنوان الحلقة..." className="search-box w-full !bg-primary/5 !pr-4" value={title} onChange={e => setTitle(e.target.value)} required />
+                                <input placeholder="أدخل عنوان الحلقة..." className="search-box" value={title} onChange={e => setTitle(e.target.value)} required />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">رابط YouTube</label>
@@ -681,7 +681,7 @@ const AdminPodcastManager: React.FC<{ podcasts: any[], refresh: () => void }> = 
                                     <i className="fa-brands fa-youtube yt-icon text-red-500"></i>
                                     <input
                                         placeholder="https://youtube.com/watch?v=..."
-                                        className="search-box w-full !bg-primary/5"
+                                        className="search-box"
                                         value={youtubeUrl}
                                         onChange={e => setYoutubeUrl(e.target.value)}
                                         required
@@ -692,7 +692,7 @@ const AdminPodcastManager: React.FC<{ podcasts: any[], refresh: () => void }> = 
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">اسم السلسلة</label>
-                                <input placeholder="مثال: تخفيف أحمال" className="search-box w-full !bg-primary/5 !pr-4" value={seriesTitle} onChange={e => setSeriesTitle(e.target.value)} />
+                                <input placeholder="مثال: تخفيف أحمال" className="search-box" value={seriesTitle} onChange={e => setSeriesTitle(e.target.value)} />
                             </div>
                             <button type="submit" className="btn btn-primary w-full py-4 text-base font-bold shadow-lg shadow-primary/20">
                                 <i className="fa-solid fa-cloud-arrow-up"></i> حفظ الحلقة
@@ -781,7 +781,7 @@ const AdminKidsManager: React.FC<{ kidsVideos: any[], refresh: () => void }> = (
                         <div className="space-y-5">
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">عنوان المحتوى</label>
-                                <input placeholder="أدخل عنوان الفيديو..." className="search-box w-full !bg-primary/5 !pr-4" value={title} onChange={e => setTitle(e.target.value)} required />
+                                <input placeholder="أدخل عنوان الفيديو..." className="search-box" value={title} onChange={e => setTitle(e.target.value)} required />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">رابط YouTube</label>
@@ -789,7 +789,7 @@ const AdminKidsManager: React.FC<{ kidsVideos: any[], refresh: () => void }> = (
                                     <i className="fa-brands fa-youtube yt-icon text-red-500"></i>
                                     <input
                                         placeholder="https://youtube.com/watch?v=..."
-                                        className="search-box w-full !bg-primary/5"
+                                        className="search-box"
                                         value={youtubeUrl}
                                         onChange={e => setYoutubeUrl(e.target.value)}
                                         required
@@ -801,11 +801,11 @@ const AdminKidsManager: React.FC<{ kidsVideos: any[], refresh: () => void }> = (
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">القسم</label>
-                                    <input placeholder="ألعاب / فيديوهات" className="search-box w-full !bg-primary/5 !pr-4" value={sectionTitle} onChange={e => setSectionTitle(e.target.value)} />
+                                    <input placeholder="ألعاب / فيديوهات" className="search-box" value={sectionTitle} onChange={e => setSectionTitle(e.target.value)} />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-muted uppercase tracking-wider px-1">أيقونة</label>
-                                    <input placeholder="fa-star" className="search-box w-full !bg-primary/5 !pr-4" value={icon} onChange={e => setIcon(e.target.value)} />
+                                    <input placeholder="fa-star" className="search-box" value={icon} onChange={e => setIcon(e.target.value)} />
                                 </div>
                             </div>
                             <div className="space-y-2">
@@ -917,33 +917,33 @@ const AdminSubjectsManager: React.FC<{ subjects: any[], refresh: () => void }> =
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-muted px-1 uppercase tracking-wider">عنوان المادة</label>
-                                    <input className="search-box w-full !bg-primary/5 !pr-4" value={title} onChange={e => setTitle(e.target.value)} required placeholder="مثال: لغة عربية" />
+                                    <input className="search-box" value={title} onChange={e => setTitle(e.target.value)} required placeholder="مثال: لغة عربية" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-muted px-1 uppercase tracking-wider">السنة الدراسية</label>
-                                    <input className="search-box w-full !bg-primary/5 !pr-4" value={grade} onChange={e => setGrade(e.target.value)} placeholder="مثال: الصف الأول" />
+                                    <input className="search-box" value={grade} onChange={e => setGrade(e.target.value)} placeholder="مثال: الصف الأول" />
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-muted px-1 uppercase tracking-wider">التصنيف</label>
-                                    <input className="search-box w-full !bg-primary/5 !pr-4" value={category} onChange={e => setCategory(e.target.value)} placeholder="ابتدائي / ثانوي" />
+                                    <input className="search-box" value={category} onChange={e => setCategory(e.target.value)} placeholder="ابتدائي / ثانوي" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-muted px-1 uppercase tracking-wider">رابط الصورة</label>
-                                    <input className="search-box w-full !bg-primary/5 !pr-4" value={image} onChange={e => setImage(e.target.value)} placeholder="https://..." />
+                                    <input className="search-box" value={image} onChange={e => setImage(e.target.value)} placeholder="https://..." />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted px-1 uppercase tracking-wider">رابط YouTube للشرح</label>
                                 <div className="youtube-url-input-wrap">
                                     <i className="fa-brands fa-youtube yt-icon text-red-500"></i>
-                                    <input className="search-box w-full !bg-primary/5" value={youtubeUrl} onChange={e => setYoutubeUrl(e.target.value)} placeholder="رابط شرح المادة..." dir="ltr" />
+                                    <input className="search-box" value={youtubeUrl} onChange={e => setYoutubeUrl(e.target.value)} placeholder="رابط شرح المادة..." dir="ltr" />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-muted px-1 uppercase tracking-wider">رابط تحميل الكتاب (PDF)</label>
-                                <input className="search-box w-full !bg-primary/5 !pr-4" value={downloadUrl} onChange={e => setDownloadUrl(e.target.value)} placeholder="رابط التحميل المباشر..." />
+                                <input className="search-box" value={downloadUrl} onChange={e => setDownloadUrl(e.target.value)} placeholder="رابط التحميل المباشر..." />
                             </div>
                             <button type="submit" className="btn btn-primary w-full py-4 text-base font-bold shadow-lg shadow-primary/20">
                                 <i className="fa-solid fa-cloud-arrow-up"></i> حفظ المادة

@@ -16,7 +16,13 @@ const PAGE_SIZE = 24
 
 // Normalize Arabic to fix ة/ه and أ/إ/ا differences
 const normalize = (t?: string | null) =>
-    (t || '').replace(/[أإآا]/g, 'ا').replace(/[ةه]/g, 'ه').trim()
+    (t || '').toLocaleLowerCase('ar-EG')
+        .replace(/[أإآا]/g, 'ا')
+        .replace(/[ةه]/g, 'ه')
+        .replace(/[ىي]/g, 'ي')
+        .replace(/[ؤئ]/g, 'ء')
+        .replace(/\s+/g, ' ')
+        .trim()
 
 const Subjects: React.FC = () => {
     const navigate = useNavigate()
@@ -29,15 +35,28 @@ const Subjects: React.FC = () => {
     const [page, setPage] = useState(1)
     const [loading, setLoading] = useState(true)
 
-    // Detect term from title
+    // Detect term from title with much stronger keyword list
     const detectTerm = (title: string): 'ترم أول' | 'ترم ثاني' | null => {
         const t = normalize(title)
-        const isFirst = t.includes('ترم اول') || t.includes('ترم 1') || t.includes('الفصل الاول') ||
-            t.includes('الترم الاول') || t.includes('term 1') || t.includes('first term')
-        const isSecond = t.includes('ترم ثاني') || t.includes('ترم 2') || t.includes('الفصل الثاني') ||
-            t.includes('الترم الثاني') || t.includes('term 2') || t.includes('second term')
-        if (isFirst) return 'ترم أول'
+
+        // Term 1 Triggers
+        const isFirst =
+            t.includes('ترم اول') || t.includes('ترم1') || t.includes('ترم 1') ||
+            t.includes('فصل اول') || t.includes('فصل 1') || t.includes('الاول') ||
+            t.includes('term 1') || t.includes('term1') || t.includes('1st term') ||
+            t.includes('semester 1') || t.includes('sem 1') || t.includes('١')
+
+        // Term 2 Triggers
+        const isSecond =
+            t.includes('ترم ثاني') || t.includes('ترم ثان') || t.includes('ترم2') || t.includes('ترم 2') ||
+            t.includes('فصل ثاني') || t.includes('فصل ثان') || t.includes('فصل 2') || t.includes('الثاني') || t.includes('الثان') ||
+            t.includes('term 2') || t.includes('term2') || t.includes('2nd term') ||
+            t.includes('semester 2') || t.includes('sem 2') || t.includes('٢')
+
+        // Handle priority: Usually if it says "٢" it shouldn't contain "١" unless it's a multi-term course.
+        // We prioritize Term 2 if both found for safety (as "١" might be part of "٢" in some fonts/encodings, but our normalize avoids that).
         if (isSecond) return 'ترم ثاني'
+        if (isFirst) return 'ترم أول'
         return null
     }
 

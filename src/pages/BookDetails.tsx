@@ -27,7 +27,21 @@ const BookDetails: React.FC = () => {
     }, [id])
 
     const handleDownload = (book: Book) => {
-        window.open(book.download_url || book.url, '_blank')
+        let targetUrl = book.download_url
+
+        // If download_url isn't a real external link (like an anchor '#xxx'), fallback to the main source URL
+        if (!targetUrl || !targetUrl.startsWith('http')) {
+            targetUrl = book.url
+        }
+
+        if (!targetUrl || !targetUrl.startsWith('http')) {
+            alert('رابط التحميل غير متوفر لهذا الكتاب')
+            return
+        }
+
+        // Proxy through backend to avoid CORS and handle specific links (like mediafire, raw pdfs)
+        const proxyUrl = `${API_BASE}/download?url=${encodeURIComponent(targetUrl)}`
+        window.open(proxyUrl, '_blank')
     }
 
     const handleShare = (title: string) => {
