@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 
 export const AdminNavItem: React.FC<{ active: boolean, icon: string, label: string, onClick: () => void }> = ({ active, icon, label, onClick }) => (
     <button
