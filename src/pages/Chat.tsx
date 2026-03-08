@@ -607,20 +607,19 @@ const Chat: React.FC = () => {
                 </div>
             </div>
 
-            {/* Add Contact Modal */}
             <AnimatePresence>
                 {showAddContact && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <div className="chat-p-modal-overlay">
                         <motion.div
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                             onClick={() => setShowAddContact(false)}
-                            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                            className="absolute inset-0"
                         />
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="bg-white w-full max-w-sm rounded-[32px] shadow-2xl relative z-10 overflow-hidden"
+                            className="chat-p-modal-card"
                         >
                             <div className="p-6 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
                                 <h3 className="font-black text-gray-800">محادثة جديدة</h3>
