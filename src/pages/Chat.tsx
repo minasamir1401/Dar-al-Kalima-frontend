@@ -69,6 +69,7 @@ const Chat: React.FC = () => {
     const [addForm, setAddForm] = useState({ name: '', phone: '' })
     const [showScrollBtn, setShowScrollBtn] = useState(false)
     const [isAiTyping, setIsAiTyping] = useState(false)
+    const [userScroll, setUserScroll] = useState(false)
     const scrollRef = useRef<HTMLDivElement>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -105,20 +106,28 @@ const Chat: React.FC = () => {
     }
 
     useEffect(() => {
-        scrollToBottom();
-        const timer = setTimeout(() => scrollToBottom(), 300);
-        return () => clearTimeout(timer);
+        if (!userScroll) {
+            scrollToBottom();
+            const timer = setTimeout(() => scrollToBottom(), 300);
+            return () => clearTimeout(timer);
+        }
     }, [messages, activeChat])
 
     useEffect(() => {
         const container = scrollRef.current
         if (!container) return
         const handleScroll = () => {
-            const isUp = container.scrollHeight - container.scrollTop > container.clientHeight + 200
+            const isUp = container.scrollHeight - container.scrollTop > container.clientHeight + 100
             setShowScrollBtn(isUp)
+            setUserScroll(isUp)
         }
         container.addEventListener('scroll', handleScroll)
         return () => container.removeEventListener('scroll', handleScroll)
+    }, [activeChat])
+
+    // Reset user scroll when changing chat
+    useEffect(() => {
+        setUserScroll(false)
     }, [activeChat])
 
     useEffect(() => {
@@ -208,6 +217,7 @@ const Chat: React.FC = () => {
         }
         setMessages(prev => [...prev, userMsg])
         setNewMessage('')
+        setUserScroll(false) // Force scroll down on send
 
         try {
             if (activeChat.phone === '999') {
