@@ -377,24 +377,24 @@ const Chat: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="chat-p-actions">
                                 <button
                                     onClick={() => setActiveChat(AI_USER)}
-                                    className="w-10 h-10 flex flex-col items-center justify-center rounded-xl bg-gray-900 text-white hover:bg-black transition-all shadow-lg hover:shadow-gray-400 group"
+                                    className="chat-p-action-btn ai"
                                     title="تحدث مع الذكاء الاصطناعي"
                                 >
-                                    <span className="text-[10px] font-black group-hover:scale-110 transition-transform">AI</span>
+                                    <span>AI</span>
                                 </button>
                                 <button
                                     onClick={() => setShowAddContact(true)}
-                                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#0066cc] text-white hover:bg-[#004499] transition-all shadow-md shadow-blue-100"
+                                    className="chat-p-action-btn add"
                                     title="محادثة جديدة"
                                 >
                                     <PlusCircle size={20} />
                                 </button>
                                 <button
                                     onClick={() => { localStorage.removeItem('chat_user'); window.location.reload() }}
-                                    className="w-10 h-10 flex items-center justify-center rounded-xl border border-gray-100 bg-white hover:bg-red-50 text-gray-400 hover:text-red-500 transition-all"
+                                    className="chat-p-action-btn logout"
                                     title="خروج"
                                 >
                                     <LogOut size={16} />
