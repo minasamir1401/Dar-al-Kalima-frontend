@@ -11,6 +11,7 @@ import { AdminMediaManager } from '../components/admin/AdminMediaManager'
 import { AdminPodcastManager } from '../components/admin/AdminPodcastManager'
 import { AdminKidsManager } from '../components/admin/AdminKidsManager'
 import { AdminSubjectsManager } from '../components/admin/AdminSubjectsManager'
+import { AdminDonationManager } from '../components/admin/AdminDonationManager'
 
 const ADMIN_PASSWORD = 'admin2024'
 
@@ -153,6 +154,7 @@ const Admin: React.FC = () => {
                             {activeTab === 'podcast' && 'البودكاست'}
                             {activeTab === 'kids' && 'ركن الأطفال'}
                             {activeTab === 'subjects' && 'المواد الدراسية'}
+                            {activeTab === 'donation' && 'الدعم والتبرعات'}
                         </div>
                     </div>
                 </div>
@@ -187,6 +189,7 @@ const Admin: React.FC = () => {
                             <AdminNavItem active={activeTab === 'podcast'} icon="fa-microphone-lines" label="البودكاست" onClick={() => handleTabChange('podcast')} />
                             <AdminNavItem active={activeTab === 'kids'} icon="fa-palette" label="ركن الأطفال" onClick={() => handleTabChange('kids')} />
                             <AdminNavItem active={activeTab === 'subjects'} icon="fa-book-open-reader" label="المواد الدراسية" onClick={() => handleTabChange('subjects')} />
+                            <AdminNavItem active={activeTab === 'donation'} icon="fa-hand-holding-dollar" label="الدعم والتبرعات" onClick={() => handleTabChange('donation')} />
                             <div className="mt-auto pt-8">
                                 <button onClick={logout} className="btn glass !bg-accent-red/5 hover:!bg-accent-red/10 !text-accent-red !border-accent-red/20 w-full justify-between">
                                     <span>تسجيل الخروج</span>
@@ -218,6 +221,7 @@ const Admin: React.FC = () => {
                         <AdminNavItem active={activeTab === 'podcast'} icon="fa-microphone-lines" label="البودكاست" onClick={() => setActiveTab('podcast')} />
                         <AdminNavItem active={activeTab === 'kids'} icon="fa-palette" label="ركن الأطفال" onClick={() => setActiveTab('kids')} />
                         <AdminNavItem active={activeTab === 'subjects'} icon="fa-book-open-reader" label="المواد الدراسية" onClick={() => setActiveTab('subjects')} />
+                        <AdminNavItem active={activeTab === 'donation'} icon="fa-hand-holding-dollar" label="الدعم والتبرعات" onClick={() => setActiveTab('donation')} />
 
                         <div className="mt-10 px-2">
                             <button onClick={logout} className="btn glass !bg-accent-red/5 hover:!bg-accent-red/10 !text-accent-red !border-accent-red/20 w-full justify-between">
@@ -238,6 +242,7 @@ const Admin: React.FC = () => {
                     {activeTab === 'podcast' && <AdminPodcastManager podcasts={podcasts} refresh={fetchStats} />}
                     {activeTab === 'kids' && <AdminKidsManager kidsVideos={kidsVideos} refresh={fetchStats} />}
                     {activeTab === 'subjects' && <AdminSubjectsManager subjects={subjects} refresh={fetchStats} />}
+                    {activeTab === 'donation' && <AdminDonationManager />}
                 </div>
             </main>
         </div>

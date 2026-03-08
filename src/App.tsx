@@ -14,7 +14,11 @@ import Kids from './pages/Kids'
 import Subjects from './pages/Subjects'
 import LessonPage from './pages/LessonPage'
 import Admin from './pages/Admin'
+import Donation from './pages/Donation'
+import Chat from './pages/Chat'
 import Loader from './components/Loader'
+import axios from 'axios'
+import { API_BASE } from './constants'
 
 const App: React.FC = () => {
     const [loading, setLoading] = useState(true)
@@ -45,6 +49,8 @@ const App: React.FC = () => {
                     <Route path="/kids" element={<Kids />} />
                     <Route path="/subjects" element={<Subjects />} />
                     <Route path="/lesson/:id" element={<LessonPage />} />
+                    <Route path="/donation" element={<Donation />} />
+                    <Route path="/chat" element={<Chat />} />
                     <Route path="/admin" element={<Admin />} />
                 </Routes>
             </Layout>
@@ -55,6 +61,17 @@ const App: React.FC = () => {
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const location = useLocation()
+    const [donationVisible, setDonationVisible] = useState(false)
+
+    useEffect(() => {
+        axios.get(`${API_BASE}/settings/donation_page`)
+            .then(res => {
+                if (res.data && res.data.isVisible) {
+                    setDonationVisible(true)
+                }
+            })
+            .catch(err => console.error("Could not fetch donation settings", err))
+    }, [])
 
     return (
         <div className="app-container">
@@ -75,7 +92,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <div className="nav-content">
                     <Link to="/" className="logo-container cursor-pointer hover:opacity-80 transition-opacity">
                         <img src="/logo.png" alt="شعار دار الكلمة - Dar Al-Kalima" className="logo-img" style={{ height: '45px', width: 'auto', borderRadius: '8px' }} />
-                        <span className="logo-text">دار الكلمة | Dar Al-Kalima</span>
+                        <span className="logo-text">دار الكلمة</span>
                     </Link>
 
                     <button
@@ -119,6 +136,18 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                     <i className="fa-solid fa-book-open-reader"></i> المواد الدراسية
                                 </Link>
                             </li>
+                            <li>
+                                <Link to="/chat" className={location.pathname === '/chat' ? 'active' : ''} onClick={() => setIsMenuOpen(false)}>
+                                    <i className="fa-solid fa-comments spiritual-cross"></i> المراسلة
+                                </Link>
+                            </li>
+                            {donationVisible && (
+                                <li>
+                                    <Link to="/donation" className={location.pathname === '/donation' ? 'active' : ''} onClick={() => setIsMenuOpen(false)}>
+                                        <i className="fa-solid fa-hand-holding-dollar"></i> ادعم الخدمة
+                                    </Link>
+                                </li>
+                            )}
 
                         </ul>
                     </nav>
@@ -128,6 +157,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <main id="main-content" role="main">
                 {children}
             </main>
+
+            {location.pathname !== '/chat' && (
+                <Link 
+                    to="/chat" 
+                    className="global-ai-btn"
+                    onClick={() => sessionStorage.setItem('start_ai_chat', 'true')}
+                >
+                    <div className="pulse"></div>
+                    <span>AI</span>
+                </Link>
+            )}
 
             <footer className="glass mt-12 p-8 text-center" style={{ borderRadius: '32px 32px 0 0', borderTop: '1px solid var(--accent-gold)' }}>
                 <div className="flex flex-col items-center gap-4">

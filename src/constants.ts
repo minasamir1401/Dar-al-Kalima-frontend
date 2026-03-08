@@ -104,4 +104,5 @@ export const KIDS_SECTIONS: KidsSection[] = [
     }
 ];
 
+// export const API_BASE = 'http://localhost:5000/api';
 export const API_BASE = 'https://dar-al-kalima-backend.onrender.com/api';
