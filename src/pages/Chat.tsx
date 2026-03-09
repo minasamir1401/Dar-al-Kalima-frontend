@@ -147,10 +147,15 @@ const Chat: React.FC = () => {
         try { const r = await axios.get(`${API_BASE}/chat/conversations/${currentUser.phone}`); setRecentChats(r.data) } catch { }
     }
     const fetchMsgs = async () => {
-        if (!currentUser || !activeChat) return
+        if (!currentUser || !activeChat || isAiTyping) return
         try {
             const r = await axios.get(`${API_BASE}/chat/messages/${currentUser.phone}/${activeChat.phone}`);
-            setMessages(r.data)
+
+            // Only update if we have new messages or different count to avoid flickering or wiping optimistic updates
+            if (r.data.length !== messages.length) {
+                setMessages(r.data)
+            }
+
             // Save AI messages locally
             if (activeChat.phone === '999') {
                 localStorage.setItem(`local_chat_999_${currentUser.phone}`, JSON.stringify(r.data))
@@ -215,6 +220,7 @@ const Chat: React.FC = () => {
             image_url: imgUrl,
             created_at: new Date().toISOString()
         }
+
         setMessages(prev => [...prev, userMsg])
         setNewMessage('')
         setUserScroll(false) // Force scroll down on send
@@ -222,8 +228,17 @@ const Chat: React.FC = () => {
         try {
             if (activeChat.phone === '999') {
                 setIsAiTyping(true)
-                await axios.post(`${API_BASE}/chat/ai`, { senderPhone: currentUser.phone, message: text })
+                const r = await axios.post(`${API_BASE}/chat/ai`, { senderPhone: currentUser.phone, message: text })
                 setIsAiTyping(false)
+
+                // Add AI response immediately to the list instead of waiting for poll
+                if (r.data) {
+                    setMessages(prev => {
+                        // Avoid duplicates if fetchMsgs already ran in background
+                        if (prev.find(m => m.id === r.data.id)) return prev;
+                        return [...prev, r.data];
+                    });
+                }
             } else {
                 await axios.post(`${API_BASE}/chat/messages`, { senderPhone: currentUser.phone, receiverPhone: activeChat.phone, message: text, imageUrl: imgUrl })
             }
