@@ -3520,3 +3520,106 @@ div.search-box input:focus+i {
         height: 55px;
     }
 }
+
+/* Global Notifications & PWA Prompt */
+.notification-container {
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 350px;
+    pointer-events: none;
+}
+
+.notification-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 102, 204, 0.1);
+    border-radius: 20px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    pointer-events: auto;
+    animation: slide-in-bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    direction: rtl;
+}
+
+.notification-icon {
+    width: 45px;
+    height: 45px;
+    background: var(--primary);
+    color: white;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: 0 5px 15px rgba(0, 102, 204, 0.2);
+}
+
+.notification-content h4 {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.notification-content p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 2px 0 0 0;
+    font-weight: 600;
+}
+
+.notification-btn {
+    padding: 8px 15px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-right: auto;
+    transition: all 0.3s;
+}
+
+.notification-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+}
+
+.notification-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+@keyframes slide-in-bottom {
+    from {
+        opacity: 0;
+        transform: translateY(100px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    .notification-container {
+        left: 15px;
+        right: 15px;
+        bottom: 20px;
+        max-width: initial;
+    }
+}
