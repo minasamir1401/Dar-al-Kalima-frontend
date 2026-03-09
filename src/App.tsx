@@ -58,6 +58,95 @@ const App: React.FC = () => {
     )
 }
 
+const GlobalNotifications: React.FC = () => {
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [showInstall, setShowInstall] = useState(false);
+    const [showReminder, setShowReminder] = useState(false);
+    const [showWelcome, setShowWelcome] = useState(false);
+
+    useEffect(() => {
+        const welcomeTimer = setTimeout(() => setShowWelcome(true), 5000);
+        // PWA Install Prompt
+        const handleBeforeInstall = (e: any) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+            setShowInstall(true);
+        };
+        window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+
+        // 20 Minute Reminder (every 20 minutes)
+        const reminderInterval = setInterval(() => {
+            setShowReminder(true);
+            setTimeout(() => setShowReminder(false), 10000); // Auto close after 10s
+        }, 20 * 60 * 1000);
+
+        return () => {
+            clearTimeout(welcomeTimer);
+            window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+            clearInterval(reminderInterval);
+        };
+    }, []);
+
+    const handleInstallClick = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('User accepted install');
+            }
+            setDeferredPrompt(null);
+            setShowInstall(false);
+        }
+    };
+
+    return (
+        <div className="notification-container">
+            {/* Immediate Welcome / Install Hint */}
+            {showWelcome && !showInstall && (
+                <div className="notification-card">
+                    <div className="notification-icon" style={{ background: 'var(--accent-gold)' }}>
+                        <i className="fa-solid fa-star"></i>
+                    </div>
+                    <div className="notification-content">
+                        <h4>أهلاً بك في دار الكلمة</h4>
+                        <p>يمكنك تثبيت الموقع كتطبيق على موبايلك لتجربة أفضل!</p>
+                    </div>
+                    <button className="notification-close" onClick={() => setShowWelcome(false)}>×</button>
+                </div>
+            )}
+
+            {/* PWA Prompt (Official) */}
+            {showInstall && (
+                <div className="notification-card">
+                    <div className="notification-icon">
+                        <i className="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <div className="notification-content">
+                        <h4>تطبيق دار الكلمة</h4>
+                        <p>حمل تطبيقنا على جهازك لتصفح أسرع وبدون إنترنت!</p>
+                    </div>
+                    <button className="notification-btn" onClick={handleInstallClick}>تثبيت</button>
+                    <button className="notification-close" onClick={() => setShowInstall(false)}>×</button>
+                </div>
+            )}
+
+            {/* Timed Reminder */}
+            {showReminder && (
+                <div className="notification-card">
+                    <div className="notification-icon" style={{ background: 'var(--accent-gold)' }}>
+                        <i className="fa-solid fa-bell"></i>
+                    </div>
+                    <div className="notification-content">
+                        <h4>تذكير روحي</h4>
+                        <p>قال الرب: "اَلَّذِي عِنْدَهُ وَصَايَايَ وَيَحْفَظُهَا فَهُوَ الَّذِي يُحِبُّنِي"</p>
+                    </div>
+                    <button className="notification-close" onClick={() => setShowReminder(false)}>×</button>
+                </div>
+            )}
+        </div>
+    );
+}
+
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const location = useLocation()
@@ -182,93 +271,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     )
 }
 
-const GlobalNotifications: React.FC = () => {
-    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-    const [showInstall, setShowInstall] = useState(false);
-    const [showReminder, setShowReminder] = useState(false);
-    const [showWelcome, setShowWelcome] = useState(false);
 
-    useEffect(() => {
-        const welcomeTimer = setTimeout(() => setShowWelcome(true), 5000);
-        // PWA Install Prompt
-        const handleBeforeInstall = (e: any) => {
-            e.preventDefault();
-            setDeferredPrompt(e);
-            setShowInstall(true);
-        };
-        window.addEventListener('beforeinstallprompt', handleBeforeInstall);
-
-        // 20 Minute Reminder (every 20 minutes)
-        const reminderInterval = setInterval(() => {
-            setShowReminder(true);
-            setTimeout(() => setShowReminder(false), 10000); // Auto close after 10s
-        }, 20 * 60 * 1000);
-
-        return () => {
-            clearTimeout(welcomeTimer);
-            window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-            clearInterval(reminderInterval);
-        };
-    }, []);
-
-    const handleInstallClick = async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                console.log('User accepted install');
-            }
-            setDeferredPrompt(null);
-            setShowInstall(false);
-        }
-    };
-
-    return (
-        <div className="notification-container">
-            {/* Immediate Welcome / Install Hint */}
-            {showWelcome && !showInstall && (
-                <div className="notification-card">
-                    <div className="notification-icon" style={{ background: 'var(--accent-gold)' }}>
-                        <i className="fa-solid fa-star"></i>
-                    </div>
-                    <div className="notification-content">
-                        <h4>أهلاً بك في دار الكلمة</h4>
-                        <p>يمكنك تثبيت الموقع كتطبيق على موبايلك لتجربة أفضل!</p>
-                    </div>
-                    <button className="notification-close" onClick={() => setShowWelcome(false)}>×</button>
-                </div>
-            )}
-
-            {/* PWA Prompt (Official) */}
-            {showInstall && (
-                <div className="notification-card">
-                    <div className="notification-icon">
-                        <i className="fa-solid fa-mobile-screen-button"></i>
-                    </div>
-                    <div className="notification-content">
-                        <h4>تطبيق دار الكلمة</h4>
-                        <p>حمل تطبيقنا على جهازك لتصفح أسرع وبدون إنترنت!</p>
-                    </div>
-                    <button className="notification-btn" onClick={handleInstallClick}>تثبيت</button>
-                    <button className="notification-close" onClick={() => setShowInstall(false)}>×</button>
-                </div>
-            )}
-
-            {/* Timed Reminder */}
-            {showReminder && (
-                <div className="notification-card">
-                    <div className="notification-icon" style={{ background: 'var(--accent-gold)' }}>
-                        <i className="fa-solid fa-bell"></i>
-                    </div>
-                    <div className="notification-content">
-                        <h4>تذكير روحي</h4>
-                        <p>قال الرب: "اَلَّذِي عِنْدَهُ وَصَايَايَ وَيَحْفَظُهَا فَهُوَ الَّذِي يُحِبُّنِي"</p>
-                    </div>
-                    <button className="notification-close" onClick={() => setShowReminder(false)}>×</button>
-                </div>
-            )}
-        </div>
-    );
-}
 
 export default App
