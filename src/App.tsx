@@ -20,43 +20,6 @@ import Loader from './components/Loader'
 import axios from 'axios'
 import { API_BASE } from './constants'
 
-const App: React.FC = () => {
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        // Initial data fetch could happen here if needed globally
-        const timer = setTimeout(() => {
-            setLoading(false)
-        }, 1500) // Reduced loader time slightly for better UX
-        return () => clearTimeout(timer)
-    }, [])
-
-    if (loading) return <Loader />
-
-    return (
-        <Router>
-            <Layout>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/books" element={<Books />} />
-                    <Route path="/book/:id" element={<BookDetails />} />
-                    <Route path="/courses" element={<Courses />} />
-                    <Route path="/course/:id" element={<CoursePlayer />} />
-                    <Route path="/church-videos" element={<ChurchVideos />} />
-                    <Route path="/church-video/:id" element={<ChurchVideoPlayer />} />
-                    <Route path="/podcast" element={<Podcast />} />
-                    <Route path="/podcast/:id" element={<PodcastPlayer />} />
-                    <Route path="/kids" element={<Kids />} />
-                    <Route path="/subjects" element={<Subjects />} />
-                    <Route path="/lesson/:id" element={<LessonPage />} />
-                    <Route path="/donation" element={<Donation />} />
-                    <Route path="/chat" element={<Chat />} />
-                    <Route path="/admin" element={<Admin />} />
-                </Routes>
-            </Layout>
-        </Router>
-    )
-}
 
 const GlobalNotifications: React.FC = () => {
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -272,5 +235,43 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 }
 
 
+
+const App: React.FC = () => {
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        // Initial data fetch could happen here if needed globally
+        const timer = setTimeout(() => {
+            setLoading(false)
+        }, 1500) // Reduced loader time slightly for better UX
+        return () => clearTimeout(timer)
+    }, [])
+
+    if (loading) return <Loader />
+
+    return (
+        <Router>
+            <Layout>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/books" element={<Books />} />
+                    <Route path="/book/:id" element={<BookDetails />} />
+                    <Route path="/courses" element={<Courses />} />
+                    <Route path="/course/:id" element={<CoursePlayer />} />
+                    <Route path="/church-videos" element={<ChurchVideos />} />
+                    <Route path="/church-video/:id" element={<ChurchVideoPlayer />} />
+                    <Route path="/podcast" element={<Podcast />} />
+                    <Route path="/podcast/:id" element={<PodcastPlayer />} />
+                    <Route path="/kids" element={<Kids />} />
+                    <Route path="/subjects" element={<Subjects />} />
+                    <Route path="/lesson/:id" element={<LessonPage />} />
+                    <Route path="/donation" element={<Donation />} />
+                    <Route path="/chat" element={<Chat />} />
+                    <Route path="/admin" element={<Admin />} />
+                </Routes>
+            </Layout>
+        </Router>
+    )
+}
 
 export default App
