@@ -66,15 +66,46 @@ const GlobalNotifications: React.FC = () => {
         <div className="notification-container">
             {/* Immediate Welcome / Install Hint */}
             {showWelcome && !showInstall && (
-                <div className="notification-card">
-                    <div className="notification-icon" style={{ background: 'var(--accent-gold)' }}>
-                        <i className="fa-solid fa-star"></i>
+                <div className="notification-card" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%' }}>
+                        <div className="notification-icon" style={{ background: 'var(--accent-gold)' }}>
+                            <i className="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <div className="notification-content" style={{ flex: 1 }}>
+                            <h4>📲 حمّل تطبيق دار الكلمة</h4>
+                            <p>استمتع بتجربة أفضل على جهازك!</p>
+                        </div>
+                        <button className="notification-close" onClick={() => setShowWelcome(false)}>×</button>
                     </div>
-                    <div className="notification-content">
-                        <h4>أهلاً بك في دار الكلمة</h4>
-                        <p>يمكنك تثبيت الموقع كتطبيق على موبايلك لتجربة أفضل!</p>
+
+                    {/* Features list */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', paddingRight: '8px', fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                        <span>✅ تصفح أسرع وأسهل</span>
+                        <span>✅ يعمل بدون إنترنت جزئياً</span>
+                        <span>✅ وصول سريع من الشاشة الرئيسية</span>
+                        <span>✅ محتوى مسيحي شامل في متناول يدك</span>
                     </div>
-                    <button className="notification-close" onClick={() => setShowWelcome(false)}>×</button>
+
+                    {/* Install Guide Button */}
+                    <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                        <a
+                            href="https://support.google.com/chrome/answer/9658361"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="notification-btn"
+                            style={{ flex: 1, textAlign: 'center', textDecoration: 'none', display: 'block', padding: '9px 12px' }}
+                        >
+                            <i className="fa-solid fa-download" style={{ marginLeft: '6px' }}></i>
+                            خطوات التثبيت
+                        </a>
+                        <button
+                            className="notification-btn"
+                            style={{ flex: 1, background: 'var(--accent-gold)' }}
+                            onClick={() => setShowWelcome(false)}
+                        >
+                            لاحقاً
+                        </button>
+                    </div>
                 </div>
             )}
 
