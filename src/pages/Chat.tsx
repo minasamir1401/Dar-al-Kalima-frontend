@@ -36,7 +36,7 @@ interface Message {
 }
 
 const BACKEND_URL = API_BASE.replace('/api', '');
-const AI_USER: ChatUser = { name: 'ai دار الكلمة', phone: '', gender: 'AI' };
+const AI_USER: ChatUser = { name: 'ai دار الكلمة', phone: '999', gender: 'AI' };
 
 /* ─────────────────────── Helpers ─────────────────────── */
 const avatar = (name: string, gender: string, size = 42) => {
