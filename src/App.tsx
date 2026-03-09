@@ -186,8 +186,10 @@ const GlobalNotifications: React.FC = () => {
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
     const [showInstall, setShowInstall] = useState(false);
     const [showReminder, setShowReminder] = useState(false);
+    const [showWelcome, setShowWelcome] = useState(false);
 
     useEffect(() => {
+        const welcomeTimer = setTimeout(() => setShowWelcome(true), 5000);
         // PWA Install Prompt
         const handleBeforeInstall = (e: any) => {
             e.preventDefault();
@@ -203,6 +205,7 @@ const GlobalNotifications: React.FC = () => {
         }, 20 * 60 * 1000);
 
         return () => {
+            clearTimeout(welcomeTimer);
             window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
             clearInterval(reminderInterval);
         };
@@ -222,7 +225,21 @@ const GlobalNotifications: React.FC = () => {
 
     return (
         <div className="notification-container">
-            {/* PWA Prompt */}
+            {/* Immediate Welcome / Install Hint */}
+            {showWelcome && !showInstall && (
+                <div className="notification-card">
+                    <div className="notification-icon" style={{ background: 'var(--accent-gold)' }}>
+                        <i className="fa-solid fa-star"></i>
+                    </div>
+                    <div className="notification-content">
+                        <h4>أهلاً بك في دار الكلمة</h4>
+                        <p>يمكنك تثبيت الموقع كتطبيق على موبايلك لتجربة أفضل!</p>
+                    </div>
+                    <button className="notification-close" onClick={() => setShowWelcome(false)}>×</button>
+                </div>
+            )}
+
+            {/* PWA Prompt (Official) */}
             {showInstall && (
                 <div className="notification-card">
                     <div className="notification-icon">
